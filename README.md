@@ -9,5 +9,5 @@ services, and different accessibility are provided entering hours, submitting re
 coverage of the data (gaining insights to improve society), reporting errors, and the possibility of
 opening a work history.
 
-The system will be based on the C++ ,standard programming languageץ
+The system will be based on the C++ ,standard programming language.
 work environment: visual studio 2019
