@@ -1,8 +1,8 @@
 {
-  "Employees": [ //array
+  "employees": [ //array
     {
       "206902355": { //element=object
-        "first name": "bar", //members
+        "first name": "bar", //members : values
         "last name": "sela",
         "profession": "gardener",
         "email": "barsela03@gmail.com",
