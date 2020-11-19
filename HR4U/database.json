@@ -1,0 +1,48 @@
+{
+  "Employees": [
+    {
+      "206902355": {
+        "first name": "bar",
+        "last name": "sela",
+        "profession": "gardener",
+        "email": "barsela03@gmail.com",
+        "address": "rehovot",
+        "phone": "0526761996",
+        "rating": 5.0,
+        "hourly wage": 60,
+        "emergency contact name": "shalom",
+        "emergency contact phone": "0535516767"
+
+
+      }
+    },
+    {
+      "1234567": {
+        "first name": "israel",
+        "last name": "israeli",
+        "profession": "plumer",
+        "email": "israelisraeli@gmail.com",
+        "address": "bat yam",
+        "phone": "0526264596",
+        "rating": 3.5,
+        "hourly wage": 40,
+        "emergency contact name": "rahel",
+        "emergency contact phone": "0535454567"
+      }
+    },
+    {
+      "6734781": {
+        "first name": "yamit",
+        "last name": "bat galim",
+        "profession": "carpenter",
+        "email": "yamit1221@gmail.com",
+        "address": "hadera",
+        "phone": "0526443396",
+        "rating": 2.6,
+        "hourly wage": 30,
+        "emergency contact name": "lior",
+        "emergency contact phone": "0535455987"
+      }
+    }
+  ]
+}
