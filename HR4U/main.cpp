@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdlib>
 #include <iostream>
+#include <json\json.h>
 #include <json.hpp>
 #include<ctime>
 
@@ -62,9 +63,7 @@ int check()
 
 int main()
 {
-	cout << "Hello World\n";
-	cout << "bar & bar test";
-	// hello
+	cout << "new library";
 	return 0;
 }
 
