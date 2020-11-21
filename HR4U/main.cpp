@@ -107,7 +107,7 @@ void Employee_Edit_Account(string employee_id)
 		return;
 	}
 	json alldata = json::parse(is);
-	//is.close();
+
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
@@ -223,15 +223,89 @@ void Employee_Edit_Account(string employee_id)
 	}
 }
 
+void Employee_All_Inquiries(string employee_id) {
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
 
-
-int main()
-{
-	string employee_id = "22345682";
-	Employee_Edit_Account(employee_id);
-	return 0;
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			if (data["inquiries"].size() != 0)
+			{
+				cout << "Date \t Subject \t Status" << endl;
+				for (int i = 0; i < data["inquiries"].size(); ++i)
+				{
+					cout << data["inquiries dates"][i] << data["inquiries"][i] << data["inquiries status"][i];
+				}
+			}
+			else
+				cout << "No inquiries have been found.";
+		}
+	}
 }
 
+
+void Employee_Add_Inquiries(string employee_id) {
+
+}
+
+	int main()
+	{
+		string employee_id = "22345682";
+		int choice;
+		do {
+			cout << "Employee Menu!" << endl;
+			cout << "Please enter your choice:" << endl;
+			cout << "1.Edit Account" << endl;
+			cout << "2.Salary" << endl;
+			cout << "3.Inquiries" << endl;
+			cout << "4.History" << endl;
+			cout << "5.Exit/Enter shift" << endl;
+			cout << "6.EXIT SYSTEM" << endl;
+			cin >> choice;
+			switch (choice) {
+			case 1:
+				Employee_Edit_Account(employee_id);
+				break;
+			case 2:
+				break;
+			case 3:
+				cout << "Enter your choice:" << endl;
+				cout << "1.All Inquiries" << endl;
+				cout << "2.Add Inquiry" << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1:
+					Employee_All_Inquiries(employee_id);
+					break;
+				case 2:
+					Employee_Add_Inquiries(employee_id);
+					break;
+				default:
+					cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
+					cin >> choice;
+				}
+			case 4:
+				break;
+			case 5:
+				break;
+			default:
+				break;
+			}
+		} while (choice != 6);
+
+//	string employee_id = "22345682";
+//	Employee_Edit_Account(employee_id);
+	return 0;
+}
 
 
 
