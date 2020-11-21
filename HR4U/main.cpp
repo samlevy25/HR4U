@@ -44,13 +44,74 @@ void first_example_a()
 	}
 }
 
-int main()
+
+void Employee_Edit_Account(string employee_id)
 {
-	first_example_a();
-	return 0;
+	std::string path = "C:/Users/Bar Weizman/source/repos/HR4U/HR4U/database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"]==employee_id)
+		{
+			int choice;
+			do {
+				cout << "Edit Account By Employee:Choose what details would you like to edit:" << endl;
+				cout << "1.Edit Adress" << endl;
+				cout << "2.Edit Email" << endl;
+				cout << "3.Edit Phone number" << endl;
+				cout << "4.Edit Emergency contact" << endl;
+				cout << "5.Back" << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1:
+				{
+					//edit adress
+					cout << "Enter your new adress:" << endl;
+					string newadress;
+					cin >> newadress;
+					alldata["adress"] = newadress; //PROBLEM! NEED TO SOLVE
+				}
+					break;
+				case 2:
+					//edit email
+					break;
+				case 3:
+					//edit phone-number
+					break;
+				case 4:
+					//edit emergency contact details
+					break;
+				case 5:
+					cout << "Back to employee menu" << endl;
+					break;
+				default:
+					cout << "Invalid value. Please try again. Enter your choice: 1-5." << endl;
+					cin >> choice;
+				}
+			} while (choice != 5);
+
+		}
+	}
 }
 
 
+
+
+
+int main()
+{
+	string employee_id = "23646172";
+	Employee_Edit_Account(employee_id);
+	return 0;
+}
 
 
 
