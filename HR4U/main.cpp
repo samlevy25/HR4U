@@ -1,6 +1,6 @@
+#pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#include<stdlib.h>
-#include <cstdlib>
+#include <stdlib.h>
 #include <iostream>
 #include <json.hpp>
 #include <jsoncons_ext/jmespath/jmespath.hpp>
@@ -18,7 +18,7 @@ using namespace jsoncons::jsonpath;
 using namespace jsoncons;
 using namespace std;
 
-
+/*
 void first_example_a() 
 {
 	std::string path = "C:/Users/Bar Weizman/source/repos/HR4U/HR4U/database.json";
@@ -46,11 +46,60 @@ void first_example_a()
 		}
 	}
 }
+*/
 
+void write_to_file(json jsonf, string path) //re-writes the file!!(with all changes&updates)
+{
+	ofstream db;
+	db.open(path, std::ofstream::trunc); //destroy the last file,and open the path
+	if (!db.is_open()) {
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	else {
+		db << pretty_print(jsonf); //print to the json file 
+		db.close();
+	}
+}
+
+bool check_phone(string phone) {
+	if (phone.length() == 10)
+	{
+		int counter = 0;
+		for (int i = 0; i < phone.length(); ++i)
+		{
+			if (phone[i] >= 0 || phone[i] <= 9) //checks wether the phone number contains only digits 0-9
+				counter++;
+		}
+		if (counter == 10)
+			return true;
+	}
+	else {
+		cout << "phone number invalid.please enter 10 digits phone number" << endl;
+		return false;
+	}
+}
+
+bool check_email(string email) {
+	int counter1, counter2 = 0;
+	for (int i = 0; i < email.length(); ++i)
+	{
+		if (email[i] == '@') //checks wether the phone number contains '@'
+			counter1++;
+		else if (email[i] == '.') //checks wether the phone number contains '.'
+			counter2++;
+	}
+	if (counter1 == 1 && counter2>=1)
+		return true;
+	else {
+		cout << "phone number invalid.please enter 10 digits phone number" << endl;
+		return false;
+	}
+}
 
 void Employee_Edit_Account(string employee_id)
 {
-	std::string path = "C:/Users/Bar Weizman/source/repos/HR4U/HR4U/database.json";
+	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
 	{
@@ -58,7 +107,7 @@ void Employee_Edit_Account(string employee_id)
 		return;
 	}
 	json alldata = json::parse(is);
-
+	//is.close();
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
@@ -84,25 +133,83 @@ void Employee_Edit_Account(string employee_id)
 					jsonpointer::replace(data, "/address", json(newadress), ec);
 					if (ec)
 					{
-						std::cout << ec.message() << std::endl;
+						cout << ec.message() << std::endl;
 					}
 					else
 					{
-						std::cout << data << std::endl;
+						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
+						cout << "Data updated successfully ! "<<endl;
 					}
-
-				//	jsonpath::json_replace(data,"$.[].adress", newadress);
-				//	alldata["adress"] = newadress; //PROBLEM! NEED TO SOLVE
 				}
 					break;
 				case 2:
+				{
 					//edit email
+					cout << "Enter your new email:" << endl;
+					string newemail;
+					cin >> newemail;
+					while (!check_email(newemail)) //while email is invalid
+						cin >> newemail;
+					std::error_code ec;
+					jsonpointer::replace(data, "/email", json(newemail), ec);
+					if (ec)
+					{
+						cout << ec.message() << std::endl;
+					}
+					else
+					{
+						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
+						cout << "Data updated successfully ! " << endl;
+					}
+				}
 					break;
 				case 3:
+				{
 					//edit phone-number
+					cout << "Enter your new phone number:" << endl;
+					string newphone;
+					cin >> newphone;
+					while (!check_phone(newphone)) //while the phone number is invaild.
+						cin >> newphone;
+
+					std::error_code ec;
+					jsonpointer::replace(data, "/phone", json(newphone), ec);
+					if (ec)
+					{
+						cout << ec.message() << std::endl;
+					}
+					else
+					{
+						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
+						cout << "Data updated successfully ! " << endl;
+					}
+				}
 					break;
 				case 4:
+				{
 					//edit emergency contact details
+					cout << "Enter your new emergency contact name:" << endl;
+					string newname;
+					cin >> newname;
+					cout << "Enter your new emergency contact pone:" << endl;
+					string newphone;
+					cin >> newphone;
+					while (!check_phone(newphone)) //while the phone number is invaild.
+						cin >> newphone;
+
+					std::error_code ec;
+					jsonpointer::replace(data, "/emergency contact name", json(newname), ec);
+					jsonpointer::replace(data, "/emergency contact phone", json(newphone), ec);
+					if (ec)
+					{
+						cout << ec.message() << std::endl;
+					}
+					else
+					{
+						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
+						cout << "Data updated successfully ! " << endl;
+					}
+				}
 					break;
 				case 5:
 					cout << "Back to employee menu" << endl;
@@ -112,11 +219,9 @@ void Employee_Edit_Account(string employee_id)
 					cin >> choice;
 				}
 			} while (choice != 5);
-
 		}
 	}
 }
-
 
 
 
