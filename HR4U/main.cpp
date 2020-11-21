@@ -4,14 +4,17 @@
 #include <iostream>
 #include <json.hpp>
 #include <jsoncons_ext/jmespath/jmespath.hpp>
-#include<ctime>
+#include <jsoncons_ext/jsonpath/jsonpath.hpp>
+#include <jsoncons_ext/jsonpointer/jsonpointer.hpp>
+#include <ctime>
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
-#include <jsoncons_ext/jsonpointer/jsonpointer.hpp>
 #include <fstream>
 
+using namespace jsoncons::jsonpointer;
+using namespace jsoncons::jsonpath;
 using namespace jsoncons;
 using namespace std;
 
@@ -77,7 +80,19 @@ void Employee_Edit_Account(string employee_id)
 					cout << "Enter your new adress:" << endl;
 					string newadress;
 					cin >> newadress;
-					alldata["adress"] = newadress; //PROBLEM! NEED TO SOLVE
+					std::error_code ec;
+					jsonpointer::replace(data, "/address", json(newadress), ec);
+					if (ec)
+					{
+						std::cout << ec.message() << std::endl;
+					}
+					else
+					{
+						std::cout << data << std::endl;
+					}
+
+				//	jsonpath::json_replace(data,"$.[].adress", newadress);
+				//	alldata["adress"] = newadress; //PROBLEM! NEED TO SOLVE
 				}
 					break;
 				case 2:
@@ -105,10 +120,9 @@ void Employee_Edit_Account(string employee_id)
 
 
 
-
 int main()
 {
-	string employee_id = "23646172";
+	string employee_id = "22345682";
 	Employee_Edit_Account(employee_id);
 	return 0;
 }
