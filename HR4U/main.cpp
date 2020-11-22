@@ -81,7 +81,7 @@ bool check_phone(string phone) {
 }
 
 bool check_email(string email) {
-	int counter1, counter2 = 0;
+	int counter1=0, counter2 = 0;
 	for (int i = 0; i < email.length(); ++i)
 	{
 		if (email[i] == '@') //checks wether the phone number contains '@'
@@ -99,16 +99,16 @@ bool check_email(string email) {
 
 void Employee_Edit_Account(string employee_id)
 {
-	std::string path = "./database.json";
-	std::fstream is(path);
+	string path = "./database.json";
+	fstream is(path);
 	if (!is)
 	{
-		std::cout << "Cannot open " << path << std::endl;
+		cout << "Cannot open " << path << endl;
 		return;
 	}
 	json alldata = json::parse(is);
 
-	for (std::size_t i = 0; i < alldata.size(); ++i)
+	for (std::size_t i = 0; i < alldata.size(); ++i) //runs all objectss
 	{
 		json& data = alldata[i];
 		if (data["id"]==employee_id)
