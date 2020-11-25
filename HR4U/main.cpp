@@ -47,6 +47,53 @@ void first_example_a()
 	}
 }
 */
+//**********************************************************************
+//**PASSWORDS&USERNAME GENERATOR!**
+static const char alphnum[] = "0123456789" "!@#$%^&*" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "abcdefghijklmnopqrstuvwxyz";
+int strLen = sizeof(alphnum) - 1;
+char GenRand()
+{
+	return alphnum[rand() % strLen];
+}
+
+string GenRandomChars(int n)
+{
+	int c = 0, s = 0;
+	srand(time(0));
+N:
+	char C;
+	string password;
+	for (int z = 0; z < n; z++)
+	{
+		C = GenRand();
+		password += C;
+		if (isdigit(C))
+		{
+			c++;
+		}
+		if (C == '!' || C == '@' || C == '$' || C == '%' || C == '^' || C == '&' || C == '*' || C == '#')
+		{
+			s++;
+		}
+	}
+	if (n > 2 && (s == 0 || c == 0))
+	{
+		goto N;
+	}
+	return password;
+}
+
+void createpassword(const string& name) {
+	//add the option to check if the user name already exists or not.!
+	string username = name + GenRandomChars(2);
+	string password = GenRandomChars(8);
+	cout << username << endl;
+	cout << password << endl;
+	//	string username_password[2] = { username,password };
+	//	return username_password;
+}
+//**********************************************************************
+
 
 //**FUNCTION FOR RE-WRITING THE FILE (with all changes&updates) **//
 void write_to_file(json jsonf, string path) 
@@ -62,7 +109,7 @@ void write_to_file(json jsonf, string path)
 		db.close();
 	}
 }
-//****************************hello im ron**********************************//
+//**************************************************************//
 
 
 bool check_phone(string phone) {
