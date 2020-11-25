@@ -48,19 +48,22 @@ void first_example_a()
 }
 */
 
-void write_to_file(json jsonf, string path) //re-writes the file!!(with all changes&updates)
+//**FUNCTION FOR RE-WRITING THE FILE (with all changes&updates) **//
+void write_to_file(json jsonf, string path) 
 {
-	ofstream db;
-	db.open(path, std::ofstream::trunc); //destroy the last file,and open the path
+	ofstream db; 
+	db.open(path, std::ofstream::trunc); //destroy the last file,and opens a path
 	if (!db.is_open()) {
 		std::cout << "Cannot open " << path << std::endl;
 		return;
 	}
 	else {
-		db << pretty_print(jsonf); //print to the json file 
+		db << pretty_print(jsonf); //prints to the json file 
 		db.close();
 	}
 }
+//*****************************************************************//
+
 
 bool check_phone(string phone) {
 	if (phone.length() == 10)
@@ -257,53 +260,54 @@ void Employee_Add_Inquiries(string employee_id) {
 
 }
 
-	int main()
-	{
-		string employee_id = "22345682";
-		int choice;
-		do {
-			cout << "Employee Menu!" << endl;
-			cout << "Please enter your choice:" << endl;
-			cout << "1.Edit Account" << endl;
-			cout << "2.Salary" << endl;
-			cout << "3.Inquiries" << endl;
-			cout << "4.History" << endl;
-			cout << "5.Exit/Enter shift" << endl;
-			cout << "6.EXIT SYSTEM" << endl;
+void Employee_Menu(string employee_id){
+	int choice;
+	do {
+		cout << "Employee Menu!" << endl;
+		cout << "Please enter your choice:" << endl;
+		cout << "1.Edit Account" << endl;
+		cout << "2.Salary" << endl;
+		cout << "3.Inquiries" << endl;
+		cout << "4.History" << endl;
+		cout << "5.Exit/Enter shift" << endl;
+		cout << "6.EXIT SYSTEM" << endl;
+		cin >> choice;
+		switch (choice) {
+		case 1:
+			Employee_Edit_Account(employee_id);
+			break;
+		case 2:
+			break;
+		case 3:
+			cout << "Enter your choice:" << endl;
+			cout << "1.All Inquiries" << endl;
+			cout << "2.Add Inquiry" << endl;
 			cin >> choice;
 			switch (choice) {
 			case 1:
-				Employee_Edit_Account(employee_id);
+				Employee_All_Inquiries(employee_id);
 				break;
 			case 2:
-				break;
-			case 3:
-				cout << "Enter your choice:" << endl;
-				cout << "1.All Inquiries" << endl;
-				cout << "2.Add Inquiry" << endl;
-				cin >> choice;
-				switch (choice) {
-				case 1:
-					Employee_All_Inquiries(employee_id);
-					break;
-				case 2:
-					Employee_Add_Inquiries(employee_id);
-					break;
-				default:
-					cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
-					cin >> choice;
-				}
-			case 4:
-				break;
-			case 5:
+				Employee_Add_Inquiries(employee_id);
 				break;
 			default:
-				break;
+				cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
+				cin >> choice;
 			}
-		} while (choice != 6);
+		case 4:
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
+	} while (choice != 6);
+}
 
-//	string employee_id = "22345682";
-//	Employee_Edit_Account(employee_id);
+
+int main(){
+	string employee_id = "22345682";
+	Employee_Menu(employee_id);
 	return 0;
 }
 
