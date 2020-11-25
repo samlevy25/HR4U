@@ -18,49 +18,70 @@ using namespace jsoncons::jsonpath;
 using namespace jsoncons;
 using namespace std;
 
-/*
-void first_example_a() 
+//**********************************************************************
+//**PASSWORDS&USERNAME GENERATOR!**
+static const char alphnum[] = "0123456789" "!@#$%^&*" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "abcdefghijklmnopqrstuvwxyz";
+int strLen = sizeof(alphnum) - 1;
+char GenRand()
 {
-	std::string path = "C:/Users/Bar Weizman/source/repos/HR4U/HR4U/database.json";
-	std::fstream is(path);
-	if (!is)
-	{
-		std::cout << "Cannot open " << path << std::endl;
-		return;
-	}
-	json alldata = json::parse(is);
-
-	for (std::size_t i = 0; i < alldata.size(); ++i)
-	{
-		try
-		{
-			json& data = alldata[i];
-			std::string firstname = data["first name"].as<std::string>();
-			std::string lastname = data["last name"].as<std::string>();
-			double hourlywage = data["hourly wage"].as<double>();
-			std::cout << firstname << ", " << lastname << ", " << hourlywage << std::endl;
-		}
-		catch (const std::exception & e)
-		{
-			std::cerr << e.what() << std::endl;
-		}
-	}
+	return alphnum[rand() % strLen];
 }
-*/
 
-void write_to_file(json jsonf, string path) //re-writes the file!!(with all changes&updates)
+string GenRandomChars(int n)
 {
-	ofstream db;
-	db.open(path, std::ofstream::trunc); //destroy the last file,and open the path
+	int c = 0, s = 0;
+	srand(time(0));
+N:
+	char C;
+	string password;
+	for (int z = 0; z < n; z++)
+	{
+		C = GenRand();
+		password += C;
+		if (isdigit(C))
+		{
+			c++;
+		}
+		if (C == '!' || C == '@' || C == '$' || C == '%' || C == '^' || C == '&' || C == '*' || C == '#')
+		{
+			s++;
+		}
+	}
+	if (n > 2 && (s == 0 || c == 0))
+	{
+		goto N;
+	}
+	return password;
+}
+
+void createpassword(const string& name) {
+	//add the option to check if the user name already exists or not.!
+	string username = name + GenRandomChars(2);
+	string password = GenRandomChars(8);
+	cout << username << endl;
+	cout << password << endl;
+	//	string username_password[2] = { username,password };
+	//	return username_password;
+}
+//**********************************************************************
+
+
+//**FUNCTION FOR RE-WRITING THE FILE (with all changes&updates) **//
+void write_to_file(json jsonf, string path) 
+{
+	ofstream db; 
+	db.open(path, std::ofstream::trunc); //destroy the last file,and opens a path
 	if (!db.is_open()) {
 		std::cout << "Cannot open " << path << std::endl;
 		return;
 	}
 	else {
-		db << pretty_print(jsonf); //print to the json file 
+		db << pretty_print(jsonf); //prints to the json file 
 		db.close();
 	}
 }
+//**************************************************************//
+
 
 bool check_phone(string phone) {
 	if (phone.length() == 10)
@@ -99,16 +120,16 @@ bool check_email(string email) {
 
 void Employee_Edit_Account(string employee_id)
 {
-	std::string path = "./database.json";
-	std::fstream is(path);
+	string path = "./database.json";
+	fstream is(path);
 	if (!is)
 	{
-		std::cout << "Cannot open " << path << std::endl;
+		cout << "Cannot open " << path << endl;
 		return;
 	}
 	json alldata = json::parse(is);
 
-	for (std::size_t i = 0; i < alldata.size(); ++i)
+	for (std::size_t i = 0; i < alldata.size(); ++i) //runs all objectss
 	{
 		json& data = alldata[i];
 		if (data["id"]==employee_id)
@@ -223,7 +244,7 @@ void Employee_Edit_Account(string employee_id)
 	}
 }
 
-void Employee_All_Inquiries(string employee_id) {
+void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -257,53 +278,54 @@ void Employee_Add_Inquiries(string employee_id) {
 
 }
 
-	int main()
-	{
-		string employee_id = "22345682";
-		int choice;
-		do {
-			cout << "Employee Menu!" << endl;
-			cout << "Please enter your choice:" << endl;
-			cout << "1.Edit Account" << endl;
-			cout << "2.Salary" << endl;
-			cout << "3.Inquiries" << endl;
-			cout << "4.History" << endl;
-			cout << "5.Exit/Enter shift" << endl;
-			cout << "6.EXIT SYSTEM" << endl;
+void Employee_Menu(string employee_id){
+	int choice;
+	do {
+		cout << "Employee Menu!" << endl;
+		cout << "Please enter your choice:" << endl;
+		cout << "1.Edit Account" << endl;
+		cout << "2.Salary" << endl;
+		cout << "3.Inquiries" << endl;
+		cout << "4.History" << endl;
+		cout << "5.Exit/Enter shift" << endl;
+		cout << "6.EXIT SYSTEM" << endl;
+		cin >> choice;
+		switch (choice) {
+		case 1:
+			Employee_Edit_Account(employee_id);
+			break;
+		case 2:
+			break;
+		case 3:
+			cout << "Enter your choice:" << endl;
+			cout << "1.All Inquiries" << endl;
+			cout << "2.Add Inquiry" << endl;
 			cin >> choice;
 			switch (choice) {
 			case 1:
-				Employee_Edit_Account(employee_id);
+				Employee_All_Inquiries(employee_id);
 				break;
 			case 2:
-				break;
-			case 3:
-				cout << "Enter your choice:" << endl;
-				cout << "1.All Inquiries" << endl;
-				cout << "2.Add Inquiry" << endl;
-				cin >> choice;
-				switch (choice) {
-				case 1:
-					Employee_All_Inquiries(employee_id);
-					break;
-				case 2:
-					Employee_Add_Inquiries(employee_id);
-					break;
-				default:
-					cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
-					cin >> choice;
-				}
-			case 4:
-				break;
-			case 5:
+				Employee_Add_Inquiries(employee_id);
 				break;
 			default:
-				break;
+				cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
+				cin >> choice;
 			}
-		} while (choice != 6);
+		case 4:
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
+	} while (choice != 6);
+}
 
-//	string employee_id = "22345682";
-//	Employee_Edit_Account(employee_id);
+
+int main(){
+	string employee_id = "22345682";
+	Employee_Menu(employee_id);
 	return 0;
 }
 
