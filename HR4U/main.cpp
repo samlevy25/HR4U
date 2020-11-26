@@ -417,7 +417,9 @@ void Edit_Account(string user_id)
 				}
 			} while (choice != 5);
 		}
+		break;
 	}
+	
 }
 void Employer_Edit_Account(string user_id)
 {
@@ -644,9 +646,9 @@ void Employee_Menu(string employee_id) {
 		cout << "3.Inquiries" << endl;
 		cout << "4.History" << endl;
 		cout << "5.Exit/Enter shift" << endl;
-		cout << "6.EXIT SYSTEM" << endl << endl;;
+		cout << "6.EXIT SYSTEM" << endl;
 		cin >> choice;
-		system("color 2");
+		system("color 9");
 		switch (choice) {
 		case 1:
 			Edit_Account(employee_id);
@@ -691,9 +693,9 @@ void Manager_Menu(string manager_id)
 		cout << "3.Manage Inquiries" << endl;
 		cout << "4.View/edit employee details" << endl;
 		cout << "5.Add/Remove employee" << endl;
-		cout << "6.EXIT SYSTEM" << endl << endl;
+		cout << "6.EXIT SYSTEM" << endl;
 		cin >> choice;
-		system("color 2");
+		system("color 9");
 		switch (choice) {
 		case 1:
 			Edit_Account(manager_id);
