@@ -324,8 +324,10 @@ void Employee_Menu(string employee_id){
 
 
 int main(){
-	string employee_id = "22345682";
-	Employee_Menu(employee_id);
+	string myname = "bar";
+	createpassword(myname);
+	//string employee_id = "22345682";
+	//Employee_Menu(employee_id);
 	return 0;
 }
 
