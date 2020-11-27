@@ -25,19 +25,57 @@ using std::cout;
 using std::cin;
 //declarations:
 void Employee_Menu(string employee_id);
+char GenRand();
 string GenRandomChars(int n);
+void Logo();
+void Login();
 void write_to_file(json jsonf, string path);
+bool check_card(string credit_card);
+bool check_phone(string phone);
+bool check_email(string email);
 void Edit_Account(string user_id);
+void Employer_Edit_Account(string user_id);
+void Employee_Inquiries_Menu(string employee_id);
+void Employee_All_Inquiries(string employee_id);
+void Employee_Add_Inquiries(string employee_id);
+void Employee_Menu(string employee_id);
 //dont forget to declar
 
 
-//**********************************************************************
+//*************************************************************************************************************
 static const char alphnum[] = "0123456789" "!@#$%^&*" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "abcdefghijklmnopqrstuvwxyz";
 int strLen = sizeof(alphnum) - 1;
 char GenRand()
 {
 	return alphnum[rand() % strLen];
 }
+string GenRandomChars(int n)
+{
+	int c = 0, s = 0;
+	srand(time(0));
+N:
+	char C;
+	string password;
+	for (int z = 0; z < n; z++)
+	{
+		C = GenRand();
+		password += C;
+		if (isdigit(C))
+		{
+			c++;
+		}
+		if (C == '!' || C == '@' || C == '$' || C == '%' || C == '^' || C == '&' || C == '*' || C == '#')
+		{
+			s++;
+		}
+	}
+	if (n > 2 && (s == 0 || c == 0))
+	{
+		goto N;
+	}
+	return password;
+}
+//************************************************************************************************************
 void Logo()
 {
 	system("color 9");
@@ -204,34 +242,10 @@ void Login()
 	} while (choice != 4);
 
 }
-string GenRandomChars(int n)
-{
-	int c = 0, s = 0;
-	srand(time(0));
-N:
-	char C;
-	string password;
-	for (int z = 0; z < n; z++)
-	{
-		C = GenRand();
-		password += C;
-		if (isdigit(C))
-		{
-			c++;
-		}
-		if (C == '!' || C == '@' || C == '$' || C == '%' || C == '^' || C == '&' || C == '*' || C == '#')
-		{
-			s++;
-		}
-	}
-	if (n > 2 && (s == 0 || c == 0))
-	{
-		goto N;
-	}
-	return password;
-}
-//**FUNCTION FOR RE-WRITING THE FILE (with all changes&updates) **//
-void write_to_file(json jsonf, string path)
+
+//READ&WRITE FILE **********************************************************************************************//
+
+void write_to_file(json jsonf, string path) //**FUNCTION FOR RE-WRITING THE FILE (with all changes&updates) **//
 {
 	ofstream db;
 	db.open(path, std::ofstream::trunc); //destroy the last file,and opens a path
@@ -244,6 +258,22 @@ void write_to_file(json jsonf, string path)
 		db.close();
 	}
 }
+
+json read_file() {   //**FUNCTION FOR READING THE FILE (and puts all data from the file into a json object) **//
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return 0;
+	}
+	json alldata = json::parse(is);
+	return alldata;
+}
+
+//*******************************************************************************************************************
+//CHECKING functions: credit-card/phone/email details
+
 bool check_card(string credit_card) {
 	if (credit_card.length()== 16)
 	{
@@ -294,6 +324,8 @@ bool check_email(string email) {
 		return false;
 	}
 }
+//*******************************************************************************************************************
+
 void Edit_Account(string user_id)
 {
 	string path = "./database.json";
@@ -605,6 +637,32 @@ void Employer_Edit_Account(string user_id)
 		}
 	}
 }
+
+void Employee_Inquiries_Menu(string employee_id) {
+	int choice;
+	do {
+		cout << "****************************************************************" << endl;
+		cout << "Inquiries MENU! ADD/ALL" << endl;
+		cout << "Enter your choice:" << endl;
+		cout << "1.All Inquiries" << endl;
+		cout << "2.Add Inquiry" << endl;
+		cout << "3.Back" << endl;
+		cin >> choice;
+		switch (choice) {
+		case 1:
+			Employee_All_Inquiries(employee_id);
+			break;
+		case 2:
+			Employee_Add_Inquiries(employee_id);
+			break;
+		default:
+			cout << "Invalid input.Please try again,Enter your choice 1-3:" << endl;
+			cin >> choice;
+			break;
+		}
+	}while (choice != 3);
+}
+
 void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.g
 	std::string path = "./database.json";
 	std::fstream is(path);
@@ -620,22 +678,89 @@ void Employee_All_Inquiries(string employee_id) {//the inquires detail has been 
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
-			if (data["inquiries"].size() != 0)
+			if (data["inquiries subject"].size() != 0)
 			{
-				cout << "Date \t Subject \t Status" << endl;
-				for (int i = 0; i < data["inquiries"].size(); ++i)
+				for (int i = 0; i < data["inquiries subject"].size(); ++i)
 				{
-					cout << data["inquiries dates"][i] << data["inquiries"][i] << data["inquiries status"][i];
+					cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+					cout << "Inquiry number " << i << ":" << endl;
+					cout << "Subject: " << data["inquiries subject"][i]<<endl;
+					cout << "Body: " << data["inquiries body"][i]<< endl;
+					cout<<"Status: "<< data["inquiries status"][i] << endl;
 				}
 			}
-			else
-				cout << "No inquiries have been found.";
+			else if(data["inquiries subject"].size() == 0)
+			{
+				cout << "No inquiries have been found." << endl;
+			}
 		}
 	}
 }
+
 void Employee_Add_Inquiries(string employee_id)
 {
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			int choice;
+			do {
+				cout << "****************************************************************" << endl;
+				cout << "Add inquiries:" << endl;
+				cout << "enter your choice:" << endl;
+				cout << "1.add new inquiry" << endl;
+				cout << "2.back" << endl;
+				cin >> choice;
+				switch (choice)
+				{
+				case 1: {
+					string body;
+					string subject;
+					const string status = "in process";
+					cout << "please enter your inquiry subject" << endl;
+					cin.ignore();
+					getline(cin, subject);
+					cout << "please specify your inquiry:(up to 250 letters)" << endl;
+					cin.ignore();
+					getline(cin, body);
+
+					while (subject.length() > 250)
+					{
+						cout << "your inquiry body is way too long. please try again" << endl;
+						cout << "please specify your inquiry:(up to 250 letters)" << endl;
+						cin >> body;
+					}
+
+					data["inquiries subject"].push_back(subject);
+					data["inquiries body"].push_back(body);
+					data["inquiries status"].push_back(status);
+					cout << "INQUIRY DETAILS SAVED, we`re working on it. thank you." << endl;
+					write_to_file(alldata, path);
+				}
+					  break;
+				case 2: 
+					cout << "thank you.back to inquiries menu" << endl;
+					break;
+				default:
+					cout << "invalid input.please try again.please enter your choice 1-2 only:" << endl;
+					break;
+				}
+			} while (choice != 2);
+		}
+	}
 }
+
+
 void Employee_Menu(string employee_id) {
 	int choice;
 	do {
@@ -657,21 +782,7 @@ void Employee_Menu(string employee_id) {
 			//print history
 			break;
 		case 3:
-			cout << "Enter your choice:" << endl;
-			cout << "1.All Inquiries" << endl;
-			cout << "2.Add Inquiry" << endl;
-			cin >> choice;
-			switch (choice) {
-			case 1:
-				Employee_All_Inquiries(employee_id);
-				break;
-			case 2:
-				Employee_Add_Inquiries(employee_id);
-				break;
-			default:
-				cout << "Invalid input.Please try again,Enter your choice 1-2:" << endl;
-				cin >> choice;
-			}
+			Employee_Inquiries_Menu(employee_id);
 			break;
 		case 4:
 			break;

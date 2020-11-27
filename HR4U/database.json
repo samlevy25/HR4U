@@ -1,6 +1,6 @@
 [
     {
-        "address": "rehovot", 
+        "address": "azrikam", 
         "amount of rating": 8, 
         "email": "barsela03@gmail.com", 
         "emergency contact name": "shalom", 
@@ -8,9 +8,11 @@
         "first name": "bar", 
         "hourly wage": 60, 
         "id": "206902355", 
-        "inquiries body": [], 
-        "inquiries status": [], 
-        "inquiries subject": [], 
+        "inquiries body": ["ve checked my salary and found out 2000ils are missed", " would like to take a vacation on the 23-25.12", 
+            "m very sick i cant work today"
+        ], 
+        "inquiries status": ["in process", "in process", "in process"], 
+        "inquiries subject": ["salary issue", "vacation", "home sick"], 
         "last name": "sela", 
         "number of rating": 2, 
         "password": "DU48pMah", 
