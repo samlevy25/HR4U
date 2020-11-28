@@ -27,7 +27,6 @@ using std::cout;
 using std::cin;
 
 //declarations:
-void Employee_Menu(string employee_id);
 char GenRand();
 string GenRandomChars(int n);
 void Logo();
@@ -44,7 +43,9 @@ void Employee_Inquiries_Menu(string employee_id);
 void Employee_All_Inquiries(string employee_id);
 void Employee_Add_Inquiries(string employee_id);
 void Employee_Menu(string employee_id);
+void Manager_Menu(string manager_id);
 void Employer_Menu(string employer_id);
+void Manage_Inquiries_Status();
 //dont forget to declar
 
 
@@ -168,7 +169,7 @@ void Login()
 						{
 							cout << endl << "#########################################################" << endl << endl;
 							cout << endl << "welcome  " << data["first name"] << endl << endl;
-							//manager_menu(user_id)
+							Manager_Menu(user_id);
 						}
 						if (data["type"] == "employer")
 						{
@@ -690,6 +691,59 @@ void Employee_Inquiries_Menu(string employee_id) {
 	}while (choice != 3);
 }
 
+void Manage_Inquiries_Status() {
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		
+		if (data["type"] == "employee")
+		{
+			string employee_id = data["id"].as_string();
+			Employee_All_Inquiries(employee_id);
+		}
+	}
+	string employee_id;
+	cout << "Enter the id you want to edit:" << endl;
+	cin >> employee_id;
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+
+		if (data["id"] == employee_id)
+		{
+			cout << "Enter the inquiry number you would like to update (by status)" << endl;
+			int num;
+			string ans;
+			cin >> num;
+			cout << "Enter your choice (approved/disapproved)" << endl;
+			cin >> ans;
+			//data["inquiries status"][num] = ans;
+			std::error_code ec;
+			jsonpointer::replace(data, "/inquiries status", json(ans), ec); //need to chek how we change the specific inq status
+			if (ec)
+			{
+				cout << ec.message() << std::endl;
+			}
+			else
+			{
+				write_to_file(alldata, path); //updates inquiries in file
+			}
+		}
+
+	
+	}
+
+}
+	
 void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.g
 	std::string path = "./database.json";
 	std::fstream is(path);
@@ -705,20 +759,22 @@ void Employee_All_Inquiries(string employee_id) {//the inquires detail has been 
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
+			cout << "ID:" << employee_id << endl;
 			if (data["inquiries subject"].size() != 0)
 			{
 				for (int i = 0; i < data["inquiries subject"].size(); ++i)
 				{
-					cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 					cout << "Inquiry number " << i << ":" << endl;
 					cout << "Subject: " << data["inquiries subject"][i]<<endl;
 					cout << "Body: " << data["inquiries body"][i]<< endl;
 					cout<<"Status: "<< data["inquiries status"][i] << endl;
+					cout << "-------------------------------------------------" << endl;
 				}
 			}
 			else if(data["inquiries subject"].size() == 0)
 			{
 				cout << "No inquiries have been found." << endl;
+				cout << "-------------------------------------------------" << endl;
 			}
 		}
 	}
@@ -767,7 +823,6 @@ void Employee_Add_Inquiries(string employee_id)
 						cout << "please specify your inquiry:(up to 250 letters)" << endl;
 						cin >> body;
 					}
-
 					data["inquiries subject"].push_back(subject);
 					data["inquiries body"].push_back(body);
 					data["inquiries status"].push_back(status);
@@ -894,6 +949,7 @@ void Manager_Menu(string manager_id)
 			break;
 		case 3:
 			//Manage Inquiries
+			Manage_Inquiries_Status();
 			break;
 		case 4:
 			//View/edit employee details
