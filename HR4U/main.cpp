@@ -1,5 +1,7 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#define WHITE "\033[0m"    //color reset to white
+#define BLOCKCOLOR "\033[1;100;30m" //block of color
 #include <stdlib.h>
 #include <iostream>
 #include <json.hpp>
@@ -14,7 +16,7 @@
 #include <fstream>
 #include <json/value.h>
 #include <json/writer.h>
-
+#include <windows.h>
 
 
 using namespace jsoncons::jsonpointer;
@@ -23,11 +25,14 @@ using namespace jsoncons;
 using namespace std;
 using std::cout;
 using std::cin;
+
 //declarations:
 void Employee_Menu(string employee_id);
 char GenRand();
 string GenRandomChars(int n);
 void Logo();
+void changeColor(int desiredColor);
+void print_title(string title);
 void Login();
 void write_to_file(json jsonf, string path);
 bool check_card(string credit_card);
@@ -39,6 +44,7 @@ void Employee_Inquiries_Menu(string employee_id);
 void Employee_All_Inquiries(string employee_id);
 void Employee_Add_Inquiries(string employee_id);
 void Employee_Menu(string employee_id);
+void Employer_Menu(string employer_id);
 //dont forget to declar
 
 
@@ -89,6 +95,27 @@ void Logo()
 	cout << "                           #     #       #       #               #        # # # #  " << endl;
 	cout << endl;
 }
+//**************************************************************************************************************
+void changeColor(int desiredColor)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), desiredColor);
+
+}
+void print_title(string title)
+{
+	for (int i = 0; title[i] != '\0'; i++)
+	{
+		if (title[i] == ' ')
+			cout << " ";
+		if (title[i] != ' ')
+			cout << title[i];
+		changeColor(i + 1);
+	}
+	cout << endl;
+	cout << BLOCKCOLOR << "             " << WHITE << endl;
+}
+
+//*******************************************************************************************************************
 void Login()
 {
 	string path = "./database.json";
@@ -793,6 +820,57 @@ void Employee_Menu(string employee_id) {
 		}
 	} while (choice != 6);
 }
+
+void Employer_Menu(string employer_id)
+{
+	string title = "Employer menu";
+	print_title(title);//only for printing colourful title
+	int choice;
+	do
+	{
+		cout << "Please enter your choice:" << endl;
+		cout << "1. Search & book employees" << endl << "2. Rate employee" << endl << "3. Watch hiring history" << endl << "4. Edit account" << endl << "5. Exit system(back to login screen)" << endl;
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			cout << "Enter your choice:" << endl << "1.Search employee" << endl << "2.Book employee" << endl << "3.Exit" << endl;
+			cin >> choice;
+			if (choice != 3)
+			{
+				switch (choice)
+				{
+				case 1:
+					//search employee
+					break;
+				case 2:
+					//book employee
+					break;
+				default:
+					cout << "Wrong choice, try again" << endl;
+					cin >> choice;
+				}
+			}
+			break;
+		case 2:
+			//rate employee
+			break;
+		case 3:
+			//hiring history
+			break;
+		case 4:
+			//Edit_Account(string employer_id)    
+			break;
+		case 5:
+			cout << "Back to login screen" << endl;
+			break;
+		default:
+			cout << "Wrong choice, try again" << endl;
+			break;
+		}
+	} while (choice != 5);
+}
+
 void Manager_Menu(string manager_id)
 {
 	int choice;
