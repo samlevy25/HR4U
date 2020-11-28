@@ -66,6 +66,7 @@ void Login()
 	string user_name,password;
 	string security_ans[3];
 	bool all_answer_right = true;
+	bool flag = false;
 
 	do
 	{
@@ -88,49 +89,75 @@ void Login()
 				for (std::size_t i = 0; i < alldata.size(); ++i)
 				{
 					json& data = alldata[i];
-					if (data["user name"] == user_name && data["password"] == password)
+					if(contains(data,"/user name/"))
+					{ 
+					if (data["user name"] == user_name)
 					{
-						system("color 2");
-						string user_id = data["id"].as_string();
-						if (data["type"] == "employee")
+						if (data["password"] == password)
 						{
-							cout << endl << "#########################################################"<< endl << endl;
-							cout << endl<<"welcome  " << data["first name"] << endl<<endl;
-							
-							Employee_Menu(user_id);
+							system("color 2");
+							string user_id = data["id"].as_string();
+							if (data["type"] == "employee")
+							{
+								cout << endl << "#########################################################" << endl << endl;
+								cout << endl << "welcome  " << data["first name"] << endl << endl;
+
+								Employee_Menu(user_id);
+							}
+							if (data["type"] == "manager")
+							{
+								cout << endl << "#########################################################" << endl << endl;
+								cout << endl << "welcome  " << data["first name"] << endl << endl;
+								//manager_menu(user_id)
+							}
+							if (data["type"] == "employer")
+							{
+								cout << endl << "#########################################################" << endl << endl;
+								cout << endl << "welcome  " << data["first name"] << endl << endl;
+								//employer_menu(user_id)
+							}
+							flag = true;
+							break;
 						}
-						if (data["type"] == "manager")
+						else
 						{
-							cout << endl << "#########################################################" << endl << endl;
-							cout << endl << "welcome  " << data["first name"] << endl << endl;
-							//manager_menu(user_id)
-						}
-						if (data["type"] == "employer")
-						{
-							cout << endl << "#########################################################" << endl << endl;
-							cout << endl << "welcome  " << data["first name"] << endl << endl;
-							//employer_menu(user_id)
+							system("color 4");
+							cout <<endl<< "Incorrect password" << endl;
+							cout << "1.try again" << endl;
+							cout << "2.back" << endl;
+							cin >> choice1;
+							system("color 9");
+							if (choice1 != 1 && choice1 != 2)
+							{
+								do
+								{
+									cout << "Invalid value. Please try again. Enter your choice: 1 or 2." << endl;
+									cin >> choice1;
+								} while (choice1 != 1 && choice1 != 2);
+							}
+							break;
 						}
 					}
-					else
-					{
-						system("color 4");
-						cout << "Incorrect user name or password" << endl;
-						cout << "1.try again" << endl;
-						cout << "2.back" << endl;
-						cin >> choice1;
-						system("color 9");
-						if (choice1 != 1 && choice1 != 2)
-						{
-							do
-							{
-								cout << "Invalid value. Please try again. Enter your choice: 1 or 2." << endl;
-								cin >> choice1;
-							} while (choice1 != 1 && choice1 != 2);
-						}
 
 					}
-					break;
+					
+				}
+				if (flag == false )
+				{
+					system("color 4");
+					cout << endl << "Incorrect user name" << endl;
+					cout << "1.try again" << endl;
+					cout << "2.back" << endl;
+					cin >> choice1;
+					system("color 9");
+					if (choice1 != 1 && choice1 != 2)
+					{
+						do
+						{
+							cout << "Invalid value. Please try again. Enter your choice: 1 or 2." << endl;
+							cin >> choice1;
+						} while (choice1 != 1 && choice1 != 2);
+					}
 				}
 			} while (choice1 == 1);
 			break;
