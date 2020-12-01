@@ -1328,6 +1328,7 @@ float Employee_Rate(string employee_id)
 		if (data["id"] == employee_id)
 			rating=(float)(data["number of rating"] == 0) ? 0 : (data["amount of rating"].as_double / data["number of rating"].as_double);
 	}
+	return rating;
 }
 
 //main
