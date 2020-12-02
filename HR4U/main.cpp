@@ -523,7 +523,7 @@ bool Available_Date(string employee_id, string date)
 	if (!is)
 	{
 		cout << "Cannot open " << path << endl;
-		return;
+		return false;
 	}
 	json alldata = json::parse(is);
 
@@ -533,7 +533,7 @@ bool Available_Date(string employee_id, string date)
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
-			length = data["unavailability"].size();
+			length = (int)(data["unavailability"].size());
 			for (int i = 0;i < length;i++)
 			{
 				if (data["unavailability"][i] == date)
@@ -1235,7 +1235,7 @@ bool Employer_Check_Availability(string employee_id,string date,string proffesio
 	if (!is)
 	{
 		cout << "Cannot open " << path << endl;
-		return;
+		return false;
 	}
 	json alldata = json::parse(is);
 	
@@ -1246,7 +1246,7 @@ bool Employer_Check_Availability(string employee_id,string date,string proffesio
 		{
 			if (data["proffesion"] == proffesion)
 			{
-				if (data["hourly wage"] == hourly_wage)
+				if (data["hourly wage"] <= hourly_wage)
 				{
 					if (Available_Date(employee_id, date))
 						return true;
@@ -1289,11 +1289,13 @@ void Employer_Search()//not done!!!!!
 			json& data = alldata[i];
 			if (data["type"] == "employee")
 			{
-				if (Employer_Check_Availability(data["id"].as_string, date, proffesion, hourly_wage))
+			
+				if (Employer_Check_Availability(data["id"].as_string(), date, proffesion, hourly_wage))
 				{
-					cout << data["id"].as_string << "      " << data["first name"].as_string << "      " << data["last name"].as_string << "      " << data["hourly wage"].as_string << endl << endl;
+					cout << data["id"].as_string() << "      " << data["first name"].as_string() << "      " << data["last name"].as_string() << "      " << data["hourly wage"].as_string() << endl << endl;
 					counter++;
 				}
+				
 			}
 		}
 		if (counter != 0)
@@ -1311,14 +1313,15 @@ void Employer_Search()//not done!!!!!
 
 float Employee_Rate(string employee_id)
 {
-	float rating;
+	double amount;
+	double number_of_rating;
 	float average_rating;
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
 	{
 		std::cout << "Cannot open " << path << std::endl;
-		return;
+		return 0;
 	}
 	json alldata = json::parse(is);
 
@@ -1326,9 +1329,14 @@ float Employee_Rate(string employee_id)
 	{
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
-			rating=(float)(data["number of rating"] == 0) ? 0 : (data["amount of rating"].as_double / data["number of rating"].as_double);
-	}
-	return rating;
+		{
+			amount = data["amount of rating"].as_double();
+			number_of_rating = data["number of rating"].as_double();
+			average_rating = (float)(amount /number_of_rating);
+		}
+		}
+			
+	return average_rating;
 }
 
 //main
