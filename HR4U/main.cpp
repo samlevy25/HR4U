@@ -1243,7 +1243,7 @@ void Employer_Menu(string employer_id)
 	} while (choice != 5);
 }
 
-bool Employer_Check_Availability(string employee_id,string date,string proffesion, int hourly_wage)//Checking an employee's availability on the selected date 
+bool Employer_Check_Availability(string employee_id,string date,string profession, int hourly_wage)//Checking an employee's availability on the selected date 
 {
 	string path = "./database.json";
 	fstream is(path);
@@ -1259,7 +1259,7 @@ bool Employer_Check_Availability(string employee_id,string date,string proffesio
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
-			if (data["proffesion"] == proffesion)
+			if (data["profession"] == profession)
 			{
 				if (data["hourly wage"] <= hourly_wage)
 				{
@@ -1276,7 +1276,7 @@ bool Employer_Check_Availability(string employee_id,string date,string proffesio
 
 }
 
-void Employer_Search()//not done!!!!!
+void Employer_Search()
 {
 	string path = "./database.json";
 	fstream is(path);
@@ -1286,15 +1286,19 @@ void Employer_Search()//not done!!!!!
 		return;
 	}
 	json alldata = json::parse(is);
-	int hourly_wage, counter = 0;
-	string date, proffesion;
+	int hourly_wage, counter;
+	string date, proffesion,choice2;
+	int choice;
+	bool flag;
 	do
 	{
-		cout << "Please enter selected date: ";
+		counter = 0;
+		flag = false;
+		cout << "Please enter selected date (XX.XX.XXXX):     ";
 		cin >> date;
-		cout << "Enter profession: ";
+		cout << "Enter profession:     ";
 		cin >> proffesion;
-		cout << "Enter employee's maximum hourly wage: ";
+		cout << "Enter employee's maximum hourly wage:     ";
 		cin >> hourly_wage;
 		cout << endl << "Results:" << endl << endl;
 		cout << "date: " << date << "      " << "proffesion: " << proffesion << endl << endl;
@@ -1307,21 +1311,117 @@ void Employer_Search()//not done!!!!!
 			
 				if (Employer_Check_Availability(data["id"].as_string(), date, proffesion, hourly_wage))
 				{
-					cout << data["id"].as_string() << "      " << data["first name"].as_string() << "      " << data["last name"].as_string() << "      " << data["hourly wage"].as_string() << endl << endl;
 					counter++;
+					cout <<"ID:"<< data["id"].as_string() << "     Name:" << data["first name"].as_string() <<" "<<data["last name"].as_string() <<"     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
 				}
 				
 			}
 		}
 		if (counter != 0)
 		{
-			cout << "About" << counter << " results";
+			cout << "About" << counter << " results" << endl << endl;
+			cout <<"Enter the ID number of the employee you would like to hire:" << endl;
+			cout << "OR Enter:"<<endl;
+			cout << "1. Search again" << endl;
+			cout << "2. Back to menu" << endl;
+			cin >>choice2;
+			if(choice2 != "1")
+			{
+				if (choice2 == "2")
+				{
+					cout << " You chose Back to menu" << endl;
+					return;
+				}
+				else
+				{
+					do
+					{
+						for (std::size_t i = 0; i < alldata.size(); ++i)
+						{
+							json& data = alldata[i];
+							if (data["type"] == "employee")
+							{
+								if (data["id"] == choice2)
+								{
+									data["unavailability"].push_back(date);
+									write_to_file(alldata, path);
+									flag = true;
+									break;
+								}
+							}
+						}
+						if (flag)
+						{
+							cout << "Employee hiring completed successfully! Do not forget to rate according to your satisfaction at the end!" << endl << endl;
+							cout << "Please select from the following options: " << endl;
+							cout << "1. Search again" << endl;
+							cout << "2. Back to manu" << endl;
+							cin >> choice;
+							if (choice != 1 && choice != 2)
+							{
+								do
+								{
+									cout << "Error! Invalid input. Try again" << endl << endl;
+									cout << "Please select from the following options: " << endl;
+									cout << "1. Search again" << endl;
+									cout << "2. Back" << endl;
+									cin >> choice;
+								} while (choice != 1 && choice != 2);
+							}
+							choice2 = "1";
+							
+						}
+						else
+						{
+							
+							
+							cout << "Error!No employee with this ID number" << endl << endl;
+							cout << "Enter the ID number of the employee you would like to hire:" << endl;
+							cout << "OR Enter:"<<endl;
+							cout << "1. Search again" << endl;
+							cout << "2. Back to menu" << endl;
+							cin >> choice2;
+							
+							
+						}
+
+					} while(choice2 != "1" && choice2 != "2");
+					if (choice2 == "2")
+					{
+						cout << " You chose Back to menu" << endl;
+						return;
+					}
+					
+					
+				}
+			}
+			else
+			{
+				choice = 1;
+			}
+			
 		}
 		else
 		{
-			cout << "No results were found" << endl;
+			cout << "No results were found" << endl<<endl;
+			cout << "Please select from the following options: " << endl;
+			cout << "1. Search again" << endl;
+			cout << "2. Back to manu" << endl;
+			cin >> choice;
+			if (choice != 1 && choice != 2)
+			{
+				do
+				{
+					cout << "Error! Invalid input. Try again" << endl << endl;
+					cout << "Please select from the following options: " << endl;
+					cout << "1. Search again" << endl;
+					cout << "2. Back" << endl;
+					cin >> choice;
+				} while (choice != 1 && choice != 2);
+			}
+
 		}
-	} while (true);
+	} while (choice!=2);
 	
 
 }
@@ -1355,7 +1455,9 @@ float Employee_Rate(string employee_id)
 }
 
 //main
-int main() {
+int main()
+{
+	Employer_Search();
 	Logo();
 	Login();
 	return 0;

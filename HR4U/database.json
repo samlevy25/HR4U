@@ -35,7 +35,7 @@
         "profession": "gardener", 
         "reset password details": ["sarit", "04.05.1996", "surf"], 
         "type": "employee", 
-        "unavailability": ["04.05.2020", "06.07.2021"], 
+        "unavailability": ["04.05.2020", "06.07.2021", "13.01.2020", "19.01.2020"], 
         "user name": "bar12", 
         "working hours": []
     }, 
@@ -55,7 +55,7 @@
         "number of rating": 3, 
         "password": "yh553524", 
         "phone": "0522617458", 
-        "profession": "plumer", 
+        "profession": "gardener", 
         "reset password details": ["Rina", "19.07.1999", "ski"], 
         "type": "employee", 
         "unavailability": ["14.06.2022", "06.06.2021"], 
@@ -81,7 +81,7 @@
         "profession": "carpenter", 
         "reset password details": ["Liz", "18.10.1995", "cook"], 
         "type": "employee", 
-        "unavailability": [], 
+        "unavailability": ["20.01.2020"], 
         "user name": "yamit85", 
         "working hours": []
     }, 
