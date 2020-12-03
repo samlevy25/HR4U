@@ -808,15 +808,19 @@ void Manage_Inquiries_Status() {
 				cout << "Enter your choice (approved/disapproved)" << endl;
 				cin >> ans;
 
-				//data["inquiries status"][num] = ans;
 				std::error_code ec;
-				jsonpointer::replace(data, "/inquiries status/num", json(ans), ec); //changes specific inquiry status
+				string inquiry_to_replace = "/inquiries status/";
+				inquiry_to_replace += to_string(i);
+				cout << inquiry_to_replace; //what inquiry status we want to replace
+
+				jsonpointer::replace(data, inquiry_to_replace, json(ans), ec); //changes specific inquiry status
 				if (ec)
 				{
 					cout << ec.message() << std::endl;
 				}
 				else
 				{
+					cout << "Changes saved.Thank you,Manager." << endl;
 					write_to_file(alldata, path); //updates inquiries in file
 				}
 			}

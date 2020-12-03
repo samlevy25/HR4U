@@ -26,7 +26,7 @@
         "inquiries body": ["ve checked my salary and found out 2000ils are missed", " would like to take a vacation on the 23-25.12", 
             "m very sick i cant work today"
         ], 
-        "inquiries status": ["in process", "in process", "in process"], 
+        "inquiries status": ["approved", "disapproved", "in process"], 
         "inquiries subject": ["salary issue", "vacation", "home sick"], 
         "last name": "sela", 
         "number of rating": 2, 
