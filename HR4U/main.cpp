@@ -175,7 +175,7 @@ bool check_phone(string phone) {
 		int counter = 0;
 		for (int i = 0; i < phone.length(); ++i)
 		{
-			if (phone[i] >= 0 || phone[i] <= 9) //checks wether the phone number contains only digits 0-9
+			if (int(phone[i]) >= 0 && int(phone[i]) <= 9) //checks wether the phone number contains only digits 0-9
 				counter++;
 		}
 		if (counter == 10)
@@ -800,7 +800,7 @@ void Manage_Inquiries_Status() {
 			cin >> ans;
 			//data["inquiries status"][num] = ans;
 			std::error_code ec;
-			jsonpointer::replace(data, "/inquiries status", json(ans), ec); //need to chek how we change the specific inq status
+			//jsonpointer::replace(data, "/inquiries status/num", json(ans), ec); //need to chek how we change the specific inq status
 			if (ec)
 			{
 				cout << ec.message() << std::endl;

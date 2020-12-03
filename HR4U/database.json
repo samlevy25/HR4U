@@ -1,5 +1,4 @@
 [
-<<<<<<< HEAD
     {
         "address": "ashdod", 
         "email": "ronch10@gmail.com", 
@@ -164,14 +163,6 @@
         "type": "employer", 
         "user name": "matan39"
     }, 
-    {
-        "content": "I want a pay raise", 
-        "id": "206902355", 
-        "status": "awaiting response", 
-        "subject": "raise", 
-        "type": "test for another way to save inquiris"
-    }
-=======
   {
     "address": "tel aviv",
     "email": "ronch10@gmail.com",
@@ -338,5 +329,4 @@
     "type": "employer",
     "user name": "matan39"
   }
->>>>>>> f2adafa02c74f393d1301b6177468cd9c00da7fc
 ]
