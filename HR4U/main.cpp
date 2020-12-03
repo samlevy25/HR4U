@@ -792,28 +792,36 @@ void Manage_Inquiries_Status() {
 
 		if (data["id"] == employee_id)
 		{
-			cout << "Enter the inquiry number you would like to update (by status)" << endl;
-			int num;
-			string ans;
-			cin >> num;
-			cout << "Enter your choice (approved/disapproved)" << endl;
-			cin >> ans;
-			//data["inquiries status"][num] = ans;
-			std::error_code ec;
-			//jsonpointer::replace(data, "/inquiries status/num", json(ans), ec); //need to chek how we change the specific inq status
-			if (ec)
+			int inquiries_length = data["inquiries status"].size(); //inquiries array length
+			if (inquiries_length == 0)
 			{
-				cout << ec.message() << std::endl;
+				cout << "Manager,please PAY ATTENTION! this employee has no inquiries yet." << endl;
+				break; //means no inquiries have been found for this employee
 			}
-			else
-			{
-				write_to_file(alldata, path); //updates inquiries in file
+			else {
+				cout << "Enter the inquiry number you would like to update (by status)" << endl;
+				int i; //choice of specific inquiry index
+				cin >> i;
+				while (i > inquiries_length) { //checks the if the inquiry number is in the range
+					cout << "Error. Inquiry number doesn`t exist. please try again" << endl;
+					cin >> i;
+				}
+				string ans;
+				cout << "Enter your choice (approved/disapproved) or anything extra" << endl;
+				cin >> ans;
+				std::error_code ec;
+				jsonpointer::replace(data, "/inquiries status/num", json(ans), ec); //changes specific inquiry status
+				if (ec)
+				{
+					cout << ec.message() << std::endl;
+				}
+				else
+				{
+					write_to_file(alldata, path); //updates inquiries in file
+				}
 			}
 		}
-
-
 	}
-
 }
 
 void Manager_Edit_Employee(string employee_id)
