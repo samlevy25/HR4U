@@ -746,9 +746,6 @@ void Manager_Menu(string manager_id)
 				case 2:
 					//remove employee
 					break;
-				default:
-					cout << "Invalid input.Please try again,Enter your choice 1-3:" << endl;
-					cin >> choice;
 				}
 			}
 			break;
@@ -806,9 +803,12 @@ void Manage_Inquiries_Status() {
 					cout << "Error. Inquiry number doesn`t exist. please try again" << endl;
 					cin >> i;
 				}
+
 				string ans;
-				cout << "Enter your choice (approved/disapproved) or anything extra" << endl;
+				cout << "Enter your choice (approved/disapproved)" << endl;
 				cin >> ans;
+
+				//data["inquiries status"][num] = ans;
 				std::error_code ec;
 				jsonpointer::replace(data, "/inquiries status/num", json(ans), ec); //changes specific inquiry status
 				if (ec)
@@ -821,7 +821,10 @@ void Manage_Inquiries_Status() {
 				}
 			}
 		}
+
+
 	}
+
 }
 
 void Manager_Edit_Employee(string employee_id)
