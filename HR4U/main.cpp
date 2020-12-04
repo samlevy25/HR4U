@@ -18,7 +18,7 @@
 #include <json/writer.h>
 #include <windows.h>
 
-
+//ron check
 using namespace jsoncons::jsonpointer;
 using namespace jsoncons::jsonpath;
 using namespace jsoncons;
@@ -50,7 +50,6 @@ void Employer_Menu(string employer_id);
 void Manage_Inquiries_Status();
 float Employee_Rate(string employee_id);
 void Employer_Search();
-
 //dont forget to declar
 
 
