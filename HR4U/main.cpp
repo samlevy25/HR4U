@@ -1452,10 +1452,80 @@ float Employee_Rate(string employee_id)
 			
 	return average_rating;
 }
+void Manager_Statistics()
+{
+	int choice;
+	float average_hourly_wage = 0;
+	int counter_total_employee = 0;
+	float counter_employee = 0;
+	int counter_manager = 0;
+	int total_working_hour = 0;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return ;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
 
+		json& data = alldata[i];
+		if (data["type"] == "employee")
+		{
+			counter_total_employee++;
+			counter_employee++;
+			int hour_length = data["hour"].size();
+			//average_hourly_wage += data["hourly wage"].as_int(); NEED TO COMPLETE CANT TAKE VALUE OF HOYRLY WAGE BY INT
+			/*for (size_t j = 0; j < hour_length; j++)
+			{
+				total_working_hour += data["hour"][j].as_int(); NEED TO COMPLETE CANT TAKE VALUE OF HOUR BY INT, ADD HOUR KEY TO EMPLOYEE
+			}*/
+		}
+		if (data["type"] == "manager")
+		{
+			counter_total_employee++;
+			counter_manager++;
+		}
+	}
+		do
+		{
+			cout << "1.Total Employee In company" << endl;
+			cout << "2.Total working Hours" << endl;
+			cout << "3.Average Hourly Wage" << endl;
+			cout << "4.Exit" << endl;
+			cin >> choice;
+			if (choice == 1)
+			{
+				cout << "Total Manager: " << counter_manager << endl;
+				cout << "Total Regular Employee: " << counter_employee << endl;
+				cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl;
+			}
+			else if (choice == 2)
+			{
+				cout << "Total working hours is: " << total_working_hour << endl;
+			}
+			else if (choice == 3)
+			{
+				cout << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl;
+			}
+			else if (choice == 4)
+			{
+				break;
+			}
+			else
+			{
+				cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
+				cin >> choice;
+				break;
+			}
+		} while (choice != 4);
+}
 //main
 int main()
 {
+	Manager_Statistics();
 	Employer_Search();
 	Logo();
 	Login();
