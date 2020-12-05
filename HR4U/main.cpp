@@ -52,6 +52,7 @@ float Employee_Rate(string employee_id);
 void Employer_Search();
 void Manager_Statistics();
 void Employee_Shift(string employee_id);
+void Employee_Salary_History(string employee_id);
 //dont forget to declar
 
 
@@ -571,6 +572,7 @@ void Employee_Menu(string employee_id) {
 			Employee_Inquiries_Menu(employee_id);
 			break;
 		case 4:
+			Employee_Salary_History(employee_id);
 			break;
 		case 5:
 			Employee_Shift(employee_id);
@@ -1635,6 +1637,45 @@ void Employee_Shift(string employee_id)
 					break;
 				}
 			} while (choice != 3);
+		}
+	}
+}
+
+void Employee_Salary_History(string employee_id)
+{
+	bool flag_help=false;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id) 
+		{
+			int month, year;
+			do
+			{
+				cout << "Enter month (1-12) and year to watch previous salary" << endl;
+				cin >> month >> year;
+			} while (month>12||month<0);
+			int montt_year_length = data["previous month for salary"].size();
+			for (size_t j = 0; j < montt_year_length; j++)
+			{
+				if (data["previous month for salary"][j]==month & data["previous year for salary"][j] == year)
+				{
+					flag_help = true;
+					cout << "Salary for month: " << month << " year: " << year << " is: " << data["previous salary"][j] << "$" << endl;
+				}
+			}
+			if (!flag_help)
+			{
+				cout << "There is no salary information for this month and year" << endl;
+			}
 		}
 	}
 }
