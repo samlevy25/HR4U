@@ -18,13 +18,14 @@
 #include <json/writer.h>
 #include <windows.h>
 
-//ron check
 using namespace jsoncons::jsonpointer;
 using namespace jsoncons::jsonpath;
 using namespace jsoncons;
 using namespace std;
 using std::cout;
 using std::cin;
+
+bool flag_shift = true;
 
 //declarations:
 char GenRand();
@@ -51,6 +52,7 @@ void Manage_Inquiries_Status();
 float Employee_Rate(string employee_id);
 void Employer_Search();
 void Manager_Statistics();
+void Employee_Shift(string employee_id);
 //dont forget to declar
 
 
@@ -572,6 +574,7 @@ void Employee_Menu(string employee_id) {
 		case 4:
 			break;
 		case 5:
+			Employee_Shift(employee_id);
 			break;
 		default:
 			break;
@@ -1461,7 +1464,7 @@ void Manager_Statistics()
 	int counter_total_employee = 0;
 	float counter_employee = 0;
 	int counter_manager = 0;
-	int total_working_hour = 0;
+	float total_working_hour = 0;
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -1478,12 +1481,13 @@ void Manager_Statistics()
 		{
 			counter_total_employee++;
 			counter_employee++;
-			int hour_length = data["hour"].size();
-			average_hourly_wage += data["hourly wage"].as_double(); //NEED TO COMPLETE CANT TAKE VALUE OF HOYRLY WAGE BY INT
-			/*for (size_t j = 0; j < hour_length; j++)
+			int hour_length = data["working hours"].size();
+			cout << hour_length << endl;
+			average_hourly_wage += data["hourly wage"].as_double(); 
+			for (size_t j = 0; j < hour_length; j++)
 			{
-				total_working_hour += data["hour"][j].as_int(); NEED TO COMPLETE CANT TAKE VALUE OF HOUR BY INT, ADD HOUR KEY TO EMPLOYEE
-			}*/
+				total_working_hour += data["working hours"][j].as_double();
+			}
 		}
 		if (data["type"] == "manager")
 		{
@@ -1506,7 +1510,7 @@ void Manager_Statistics()
 			}
 			else if (choice == 2)
 			{
-				cout << "Total working hours is: " << total_working_hour << endl;
+				cout << "Total working hours is: " << total_working_hour << "hours" << endl;
 			}
 			else if (choice == 3)
 			{
@@ -1518,17 +1522,129 @@ void Manager_Statistics()
 			}
 			else
 			{
-				cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
+				cout << "Invalid value. Please try again. Enter your choice: 1-4." << endl;
 				cin >> choice;
 				break;
 			}
 		} while (choice != 4);
 }
+void Employee_Shift(string employee_id) 
+{
+	int choice;
+	int start_hour, end_hour, start_minute, end_minute;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			do
+			{
+				cout << "1.Enter shift" << endl;
+				cout << "2.Exit shift" << endl;
+				cout << "3.Exit" << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1:
+				{
+					if (flag_shift == true) 
+					{
+						flag_shift = false;
+						time_t t = time(NULL);
+						tm* tPtr = localtime(&t);
+						int day = tPtr->tm_mday;
+						int year = tPtr->tm_year + 1900;
+						int month = tPtr->tm_mon + 1;
+						cout << "Date: " << day << "/" << month << "/" << year << " Start working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
+						start_hour = tPtr->tm_hour;
+						start_minute = tPtr->tm_min;
+						data["day working"].push_back(day);
+						data["month working"].push_back(month);
+						data["year working"].push_back(year);
+						data["start hour working"].push_back(start_hour);
+						data["start minute working"].push_back(start_minute);
+						//we need to write to json file day month year and hour
+						write_to_file(alldata, path);
+						break;
+					}
+					else
+					{
+						cout << "You did not exit please do it now " << endl;
+						break;
+					}
+				}
+				case 2:
+				{
+					if (flag_shift == false)
+					{
+						flag_shift = true;
+						cout << flag_shift << endl;
+						time_t t = time(NULL);
+						tm* tPtr = localtime(&t);
+						int day = tPtr->tm_mday;
+						int year = tPtr->tm_year + 1900;
+						int month = tPtr->tm_mon + 1;
+						cout << "Date: " << day << "/" << month << "/" << year << " End working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
+						//we need to write to json file day month year and hour
+						//after that we need to calculate total working hour and write to file (TEnd->hour-TStart->hour)
+						end_hour = tPtr->tm_hour;
+						end_minute = tPtr->tm_min;
+						data["end hour working"].push_back(end_hour);
+						data["end minute working"].push_back(end_minute);
+						int total_hours, total_minute;
+						float total_time;
+						int Start_hour_length = data["start hour working"].size();
+						total_minute = data["end minute working"][Start_hour_length - 1].as_double() - data["start minute working"][Start_hour_length - 1].as_double();
+						total_hours = data["end hour working"][Start_hour_length - 1].as_double() - data["start hour working"][Start_hour_length - 1].as_double();
+						if (total_minute < 0)
+						{
+							total_minute = 60 + total_minute;
+							total_hours = total_hours - 1;
+							total_time = total_hours + (total_minute / 60);
+						}
+						else
+						{
+							total_time = total_hours + (total_minute / 60);
+						}
+						if (total_time>10)
+						{
+							total_time = 0;
+							cout << "Yod did not exit from work at time please add inquiries to managaer that change you the working hours \n(For this time working hours for this date is 0)" << endl;
+							data["working hours"].push_back(total_time);
+							write_to_file(alldata, path);
+							break;
+						}
+						else
+						{
+							data["working hours"].push_back(total_time);
+							write_to_file(alldata, path);
+							break;
+						}
+					}
+				}
+				case 3:
+					break;
+				default:
+					cout << "Invalid value. Please try again. Enter your choice: 1-3." << endl;
+					cin >> choice;
+					break;
+				}
+			} while (choice != 3);
+		}
+	}
+}
+
+
 //main
 int main()
 {
-	Manager_Statistics();
-	Employer_Search();
 	Logo();
 	Login();
 	return 0;
