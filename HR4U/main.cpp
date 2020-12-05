@@ -1025,7 +1025,7 @@ void Manager_Get_Employees_Details(string employee_id)
 
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
-		json& data = alldata[i];
+		/*json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
 			flag = true;
@@ -1040,7 +1040,7 @@ void Manager_Get_Employees_Details(string employee_id)
 			// Need a Matan's function : "Salary_Calc"
 			//cout << "Salary : ";
 			//cout << Salary_Calc << " NIS";
-		}
+		}*/
 
 		if (flag)
 			break;
@@ -1595,6 +1595,7 @@ void Employee_Shift(string employee_id)
 						data["shift flag"] = false;
 						time_t t = time(NULL);
 						tm* tPtr = localtime(&t);
+						std::string start_work = std::ctime(&t);
 						int day = tPtr->tm_mday;
 						int year = tPtr->tm_year + 1900;
 						int month = tPtr->tm_mon + 1;
@@ -1606,6 +1607,7 @@ void Employee_Shift(string employee_id)
 						data["year working"].push_back(year);
 						data["start hour working"].push_back(start_hour);
 						data["start minute working"].push_back(start_minute);
+						data["start working"].push_back(start_work);
 						//we need to write to json file day month year and hour
 						write_to_file(alldata, path);
 						break;
@@ -1623,6 +1625,7 @@ void Employee_Shift(string employee_id)
 						data["shift flag"] = true;
 						time_t t = time(NULL);
 						tm* tPtr = localtime(&t);
+						std::string end_work = std::ctime(&t);
 						int day = tPtr->tm_mday;
 						int year = tPtr->tm_year + 1900;
 						int month = tPtr->tm_mon + 1;
@@ -1633,6 +1636,7 @@ void Employee_Shift(string employee_id)
 						end_minute = tPtr->tm_min;
 						data["end hour working"].push_back(end_hour);
 						data["end minute working"].push_back(end_minute);
+						data["end working"].push_back(end_work);
 						int total_hours, total_minute;
 						float total_time;
 						int Start_hour_length = data["start hour working"].size();
