@@ -1011,6 +1011,7 @@ void Manager_Edit_Employee(string employee_id)
 
 	} // end of "for"
 } // end of "Manager_Edit_Employee"
+/*
 void Manager_Get_Employees_Details(string employee_id)
 {
 	bool flag = false;
@@ -1046,6 +1047,7 @@ void Manager_Get_Employees_Details(string employee_id)
 			break;
 	}
 }
+*/
 
 //employer functions*************************************************************************************************
 void Employer_Edit_Account(string user_id)
