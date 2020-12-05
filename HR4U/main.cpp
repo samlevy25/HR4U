@@ -1011,6 +1011,41 @@ void Manager_Edit_Employee(string employee_id)
 
 	} // end of "for"
 } // end of "Manager_Edit_Employee"
+void Manager_Get_Employees_Details(string employee_id)
+{
+	bool flag = false;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			flag = true;
+			cout << "ID : ";
+			std::string alldata = data["id"].as<std::string>();
+			cout << "First Name : ";
+			std::string alldata = data["first name"].as<std::string>();
+			cout << "Last Name : ";
+			std::string alldata = data["last name"].as<std::string>();
+			cout << "Type : ";
+			std::string alldata = data["type"].as<std::string>();
+			// Need a Matan's function : "Salary_Calc"
+			//cout << "Salary : ";
+			//cout << Salary_Calc << " NIS";
+		}
+
+		if (flag)
+			break;
+	}
+}
 
 //employer functions*************************************************************************************************
 void Employer_Edit_Account(string user_id)
