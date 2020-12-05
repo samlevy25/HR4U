@@ -50,6 +50,7 @@ void Employer_Menu(string employer_id);
 void Manage_Inquiries_Status();
 float Employee_Rate(string employee_id);
 void Employer_Search();
+void Manager_Statistics();
 //dont forget to declar
 
 
@@ -721,6 +722,7 @@ void Manager_Menu(string manager_id)
 			Edit_Account(manager_id);
 			break;
 		case 2:
+			Manager_Statistics();
 			//statistics
 			break;
 		case 3:
@@ -1477,7 +1479,7 @@ void Manager_Statistics()
 			counter_total_employee++;
 			counter_employee++;
 			int hour_length = data["hour"].size();
-			//average_hourly_wage += data["hourly wage"].as_int(); NEED TO COMPLETE CANT TAKE VALUE OF HOYRLY WAGE BY INT
+			average_hourly_wage += data["hourly wage"].as_double(); //NEED TO COMPLETE CANT TAKE VALUE OF HOYRLY WAGE BY INT
 			/*for (size_t j = 0; j < hour_length; j++)
 			{
 				total_working_hour += data["hour"][j].as_int(); NEED TO COMPLETE CANT TAKE VALUE OF HOUR BY INT, ADD HOUR KEY TO EMPLOYEE
