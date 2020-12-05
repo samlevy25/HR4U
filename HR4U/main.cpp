@@ -25,7 +25,6 @@ using namespace std;
 using std::cout;
 using std::cin;
 
-bool flag_shift = true;
 
 //declarations:
 char GenRand();
@@ -1554,9 +1553,9 @@ void Employee_Shift(string employee_id)
 				switch (choice) {
 				case 1:
 				{
-					if (flag_shift == true) 
+					if (data["shift flag"] == true) 
 					{
-						flag_shift = false;
+						data["shift flag"] = false;
 						time_t t = time(NULL);
 						tm* tPtr = localtime(&t);
 						int day = tPtr->tm_mday;
@@ -1582,10 +1581,9 @@ void Employee_Shift(string employee_id)
 				}
 				case 2:
 				{
-					if (flag_shift == false)
+					if (data["shift flag"] == false)
 					{
-						flag_shift = true;
-						cout << flag_shift << endl;
+						data["shift flag"] = true;
 						time_t t = time(NULL);
 						tm* tPtr = localtime(&t);
 						int day = tPtr->tm_mday;
