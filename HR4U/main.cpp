@@ -1565,6 +1565,16 @@ void Employee_Shift(string employee_id)
 						int day = tPtr->tm_mday;
 						int year = tPtr->tm_year + 1900;
 						int month = tPtr->tm_mon + 1;
+						int size = data["working hours"].size();
+						for (size_t k = 0; k < size; k++)
+						{
+							if (data["day working"][k]==day && data["month working"][k]==month && data["year working"][k]==year)
+							{
+								cout << "You can enter shift once a day" << endl;
+								cout << "You are move to employee menu" << endl;
+								return Employee_Menu(employee_id);
+							}
+						}
 						cout << "Date: " << day << "/" << month << "/" << year << " Start working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
 						start_hour = tPtr->tm_hour;
 						start_minute = tPtr->tm_min;
@@ -1629,6 +1639,10 @@ void Employee_Shift(string employee_id)
 							write_to_file(alldata, path);
 							break;
 						}
+					}
+					else
+					{
+						cout << "You must enter shift before exit" << endl;
 					}
 				}
 				case 3:
