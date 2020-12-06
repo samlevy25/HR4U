@@ -764,6 +764,35 @@ void Manager_Menu(string manager_id)
 		}
 	} while (choice != 6);
 }
+void Manager_Get_Employees_Details(string employee_id)
+{
+	bool flag = false;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		exit;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			flag = true;
+			cout << "-ID : " << data["id"] << endl;
+			cout << "-First Name : " << data["first name"] << endl;
+			cout << "-Last Name : " << data["last name"] << endl;
+			cout << "-Type : " << data["type"] << endl;
+			//cout << "-Salary : " << Salary_Calc(employee_id) << "NIS" << endl ; // Need a Matan's function : "Salary_Calc"
+		}
+
+		if (flag)
+			break;
+	}
+}
 
 void Manage_Inquiries_Status() {
 	std::string path = "./database.json";
