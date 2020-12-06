@@ -53,6 +53,7 @@ void Employer_Search();
 void Manager_Statistics();
 void Employee_Shift(string employee_id);
 void Employee_Salary_History(string employee_id);
+void Employee_Employment_History(string employee_id);
 //dont forget to declar
 
 
@@ -572,7 +573,8 @@ void Employee_Menu(string employee_id) {
 			Employee_Inquiries_Menu(employee_id);
 			break;
 		case 4:
-			Employee_Salary_History(employee_id);
+			Employee_Employment_History(employee_id);
+			//Employee_Salary_History(employee_id);
 			break;
 		case 5:
 			Employee_Shift(employee_id);
@@ -1592,6 +1594,16 @@ void Employee_Shift(string employee_id)
 						int day = tPtr->tm_mday;
 						int year = tPtr->tm_year + 1900;
 						int month = tPtr->tm_mon + 1;
+						int size = data["working hours"].size();
+						for (size_t k = 0; k < size; k++)
+						{
+							if (data["day working"][k]==day && data["month working"][k]==month && data["year working"][k]==year)
+							{
+								cout << "You can enter shift once a day" << endl;
+								cout << "You are move to employee menu" << endl;
+								return Employee_Menu(employee_id);
+							}
+						}
 						cout << "Date: " << day << "/" << month << "/" << year << " Start working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
 						start_hour = tPtr->tm_hour;
 						start_minute = tPtr->tm_min;
@@ -1657,6 +1669,10 @@ void Employee_Shift(string employee_id)
 							break;
 						}
 					}
+					else
+					{
+						cout << "You must enter shift before exit" << endl;
+					}
 				}
 				case 3:
 					break;
@@ -1704,6 +1720,33 @@ void Employee_Salary_History(string employee_id)
 			if (!flag_help)
 			{
 				cout << "There is no salary information for this month and year" << endl;
+			}
+		}
+	}
+}
+
+void Employee_Employment_History(string employee_id)
+{
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			int length_of_work = data["working hours"].size();
+			for (size_t j = 0; j < length_of_work; j++)
+			{
+				cout << "Work Number " << j << ":" << endl;
+				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
+				cout << "Total working hours: " << data["working hours"][j] << endl;
+				//total_working_hour += data["working hours"][j].as_double();
 			}
 		}
 	}
