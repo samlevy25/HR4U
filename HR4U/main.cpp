@@ -1711,12 +1711,15 @@ void Employee_Employment_History(string employee_id)
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
+			float horly_wage = data["horly wage"].as_double();
 			int length_of_work = data["working hours"].size();
 			for (size_t j = 0; j < length_of_work; j++)
 			{
 				cout << "Work Number " << j << ":" << endl;
 				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
 				cout << "Total working hours: " << data["working hours"][j] << endl;
+				float total_hours = data["working hours"][j].as_double();
+				cout << "Total pay for this work: " << total_hours * horly_wage << "$" << endl;
 				//total_working_hour += data["working hours"][j].as_double();
 			}
 		}
