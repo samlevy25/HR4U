@@ -1878,7 +1878,7 @@ void Employer_rate_employee(string employer_id)
 				length = data["hierd id"].size();
 				for (;j < length;j++)
 				{
-					cout << "Row number    DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
+					cout << "Row number      DATE               ID            SATISFACTION             PROFESSION" << endl << endl;
 
 
 					rating = data["hiring rate"][j].as_double();
@@ -1924,7 +1924,7 @@ void Employer_rate_employee(string employer_id)
 						{
 							cout << "Error! not a number between 1 to 5";
 							cout << "What is your level of satisfaction with the service? " << endl;
-							cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
+							cout << "The rating is between 1 and 5 stars" << endl << "1 (Not satisfied at all)  to 5 (Very satisfied) " << endl;
 							cin >> rate;
 						} while (rate > 5 || rate < 1);
 					}
@@ -1944,14 +1944,18 @@ void Employer_rate_employee(string employer_id)
 						cout << "1.Rank another employee" << endl;
 						cout << "2.back to menu" << endl;
 						cin >> select;
-						do
+						if (select != 1 && select != 2)
 						{
-							cout << "Error!Invalid input" << endl;
-							cout << "Choose from the following options:" << endl;
-							cout << "1.Rank another employee" << endl;
-							cout << "2.back to menu" << endl;
-							cin >> select;
-						} while (select != 1 && select != 2);
+							do
+							{
+								cout << "Error!Invalid input" << endl;
+								cout << "Choose from the following options:" << endl;
+								cout << "1.Rank another employee" << endl;
+								cout << "2.back to menu" << endl;
+								cin >> select;
+							} while (select != 1 && select != 2);
+						}
+
 					}
 				}
 				else//already ranked this employee
@@ -1961,14 +1965,17 @@ void Employer_rate_employee(string employer_id)
 					cout << "1.Rank different employee" << endl;
 					cout << "2.back to menu" << endl;
 					cin >> select;
-					do
+					if (select != 1 && select != 2)
 					{
-						cout << "Error!Invalid input" << endl;
-						cout << "Choose from the following options:" << endl;
-						cout << "1.Rank another employee" << endl;
-						cout << "2.back to menu" << endl;
-						cin >> select;
-					} while (select != 1 && select != 2);
+						do
+						{
+							cout << "Error!Invalid input" << endl;
+							cout << "Choose from the following options:" << endl;
+							cout << "1.Rank another employee" << endl;
+							cout << "2.back to menu" << endl;
+							cin >> select;
+						} while (select != 1 && select != 2);
+					}
 				}
 
 
