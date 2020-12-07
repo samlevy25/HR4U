@@ -1976,26 +1976,17 @@ void Employer_Employment_History(string employer_id)
 		json& data = alldata[i];
 		if (data["id"] == employer_id)
 		{
-			flag = true;
-
-			int lenght = (int)(data["hierd id"].size());
-
-			cout << "DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
-
-			for (int y = 0; y < lenght; ++y)
+			int length_of_work = data["working hours"].size();
+			for (size_t j = 0; j < length_of_work; j++)
 			{
-				rating = data["hiring rate"][y].as_double();
-				if (rating == 0)
-					print_rating = "No rating";
-				else
-					print_rating = data["hiring rate"][y].as_string();
-
-				cout << data["hiring date"][y].as_string() << "       " << data["hierd id"][y].as_string() << "            " << print_rating << "                    " << data["hierd id"][y].as_string() << endl;
+				cout << "Work Number " << j << ":" << endl;
+				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
+				cout << "Total working hours: " << data["working hours"][j] << endl;
+				//total_working_hour += data["working hours"][j].as_double();
 			}
 		}
-		if (flag)
-			break;
 	}
+}
 
 }
 
