@@ -40,6 +40,7 @@ bool check_phone(string phone);
 bool check_email(string email);
 void Edit_Account(string user_id);
 //employee
+void Employee_Guide();
 void Employee_Shift(string employee_id);
 void Employee_Salary_History(string employee_id);
 void Employee_Employment_History(string employee_id);
@@ -52,6 +53,7 @@ string Get_employee_name(string employee_id);
 void insert_employee_rating(string employee_id, int rate);
 //manager
 void Manager_Menu(string manager_id);
+void Manager_Guide();
 void Manage_Inquiries_Status();
 void Manager_Edit_Employee(string employee_id);
 void Manager_Statistics();
@@ -63,6 +65,7 @@ void Employer_Edit_Account(string user_id);
 void Employer_Employment_History(string employer_id);
 void Employer_Search(string employer_id);
 void Employer_rate_employee(string employer_id);
+void Employer_Guide();
 //dont forget to declar
 
 
@@ -590,6 +593,7 @@ void Employee_Menu(string employee_id) {
 			Employee_Shift(employee_id);
 			break;
 		case 6:
+			Employee_Guide();
 			break;
 		case 7:
 			break;
@@ -597,6 +601,24 @@ void Employee_Menu(string employee_id) {
 			break;
 		}
 	} while (choice != 7);
+}
+
+void Employee_Guide()
+{
+	cout << "Hello, I will teach you now how to use the system." << endl << endl
+		<< "First of all, the main menu: " << endl
+		<< "1.Edit Account  ->  Gives you the ability to edit your details (Address, Mail and more..)" << endl
+		<< "2.Salary  ->  Shows you all the details of your salary this month, all the hours you have been worked and your final salary" << endl
+		<< "3.Inquiries  ->  With inquiries you can add new inquirie or see all of your inquiries" << endl
+		<< "4.History  ->  With history you can see all of your working days this month (When you arrived to work and when you end your day)" << endl
+		<< "5.Exit/Enter shift  ->  By clicking Exit shift, it says to the system that you finished your day of working, and by clicking Enter shift , the system will understand that you are now started your day at the work" << endl << endl << endl
+		<< "Now you're going to learn about the inquiries menu." << endl << endl
+		<< "1.All Inquiries  ->  Shows you all of the inquiries you have been sent and see all the details about them" << endl
+		<< "2.Add Inquiry  ->  Gives you the ability to send new inquirie" << endl << endl
+		<< "Now I belive you are ready to use the system" << endl
+		<< "Have a great day HR4U" << endl<<endl;
+	cout<<"-----------------------------------"<< endl << endl;
+
 }
 
 void Employee_Inquiries_Menu(string employee_id) {
@@ -1063,6 +1085,7 @@ void Manager_Menu(string manager_id)
 			}
 			break;
 		case 6:
+			Manager_Guide();
 			break;
 		case 7:
 			cout << "Back to login screen" << endl;
@@ -1073,6 +1096,20 @@ void Manager_Menu(string manager_id)
 			break;
 		}
 	} while (choice != 7);
+}
+
+void Manager_Guide()
+{
+	cout << "Hello, I will teach you now how to use the system." << endl << endl
+		<< "The main menu: " << endl
+		<< "1.Edit your Account  ->  Gives you the ability to edit your details (Address, Mail and more..)" << endl
+		<< "2.View company statistics  ->  Shows you everything you need to know about the company (Average hourly wage, Company employees and more..)" << endl
+		<< "3.Manage Inquiries  ->  Gives you the ability to manage all the inquiries from your employees and send them your answers" << endl
+		<< "4.View/edit employee details  ->  With this feature you can view every detail about all the employees in the company, and you can edit those details when you need" << endl
+		<< "5.Add/Remove employee  ->  Gives you the ability to manage all the employees in the company, you can click add and add new employee or click remove and remove employee" << endl << endl
+		<< "Now I belive you are ready to use the system" << endl
+		<< "Have a great day HR4U" << endl;
+	cout << "-----------------------------------" << endl << endl;
 }
 
 void Manager_Get_Employees_Details(string employee_id)
@@ -1425,6 +1462,20 @@ void Manager_Statistics()
 }
 
 //employer functions*************************************************************************************************
+void Employer_Guide()
+{
+	cout << "Hello, I will teach you now how to use the system." << endl << endl
+		<< "First of all, the main menu: " << endl
+		<< "1.Search & book employees  ->  Gives you the ability look for an employee by the proffesion you want in a date you choose and set the price you would like to pay for him, by click Search you will see all the results in a page called Results" << endl
+		<< "2.Rate employee  ->  Gives you the ability to rate employee by his ID in a scale from 1 to 5 (5 is the best rate employee can get)" << endl
+		<< "3.Hiring history  ->  Gives you the ability to see all of the hiring you have been made" << endl << endl << endl
+		<< "Now you're going to learn about the Results page." << endl << endl
+		<< "In the result page, you will see all the employees you can hire by filtering you've been made in the Search page, the results will be shown by the name of the employee, his job, his rating and than you will have the option to hire him by clicking book" << endl << endl
+		<< "Now I belive you are ready to use the system" << endl
+		<< "Have a great day HR4U" << endl;
+	cout << "-----------------------------------" << endl << endl;
+}
+
 void Employer_Edit_Account(string user_id)
 {
 	string path = "./database.json";
@@ -1640,7 +1691,7 @@ void Employer_Menu(string employer_id)
 			Employer_Edit_Account(employer_id);
 			break;
 		case 5:
-			//user guide
+			Employer_Guide();
 			break;
 		case 6:
 			cout << "Back to login screen" << endl;
