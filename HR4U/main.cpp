@@ -590,6 +590,8 @@ void Employee_Menu(string employee_id) {
 			break;
 		case 6:
 			break;
+		case 7:
+			break;
 		default:
 			break;
 		}
@@ -858,6 +860,7 @@ void Manager_Menu(string manager_id)
 		}
 	} while (choice != 7);
 }
+
 void Manager_Get_Employees_Details(string employee_id)
 {
 	bool flag = false;
@@ -1401,7 +1404,7 @@ void Employer_Menu(string employer_id)
 	do
 	{
 		cout << "Please enter your choice:" << endl;
-		cout << "1. Search & book employees" << endl << "2. Rate employee" << endl << "3. Watch hiring history" << endl << "4. Edit account" << endl << "5. Exit system(back to login screen)" << endl;
+		cout << "1. Search & book employees" << endl << "2. Rate employee" << endl << "3. Watch hiring history" << endl << "4. Edit account" <<" 5.User guide" << endl << "6. Exit system(back to login screen)" << endl;
 		cin >> choice;
 		switch (choice)
 		{
@@ -1813,30 +1816,31 @@ void Employer_rate_employee(string employer_id)
 		json& data = alldata[i];
 		if (data["id"] == employer_id)
 		{
+			int j = 0;
 			length = data["hierd id"].size();
-			for (int i = 0;i < length;i++)
+			for (;j < length;j++)
 			{
 				cout << "Row number    DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
 
 
-				rating = data["hiring rate"][i].as_double();
+				rating = data["hiring rate"][j].as_double();
 				if (rating == 0)
 					print_rating = "No rating";
 				else
-					print_rating = data["hiring rate"][i].as_string();
+					print_rating = data["hiring rate"][j].as_string();
 
-				cout << "  " << i + 1 << data["hiring date"][i].as_string() << "       " << data["hierd id"][i].as_string() << "            " << print_rating << "                    " << data["hierd proffesion"][i].as_string() << endl;
+				cout << "  " << j + 1 << data["hiring date"][j].as_string() << "       " << data["hierd id"][j].as_string() << "            " << print_rating << "                    " << data["hierd proffesion"][j].as_string() << endl;
 
 			}
 			cout << "Enter the number in the line that shows the employee you hired on a specific date that you would like to rank: " << endl;
 			cin >> choice;
-			if (choice > (i + 1) || choice < (i + 1))
+			if (choice > i || choice < 1)
 			{
 				do
 				{
 					cout << "Error! not a number between " << 1 << " to " << (i + 1) << endl;
 
-				} while (choice > (i + 1) || choice < (i + 1));
+				} while (choice > (i + 1) || choice < 1);
 			}
 			rating = data["hiring rate"][choice - 1].as_double();
 			if (rating == 0)
@@ -1988,7 +1992,6 @@ void Employer_Employment_History(string employer_id)
 	}
 }
 
-}
 
 //main
 int main()
