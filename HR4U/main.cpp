@@ -57,7 +57,7 @@ void Manager_Guide();
 void Manage_Inquiries_Status();
 void Manager_Edit_Employee(string employee_id);
 void Manager_Statistics();
-void Manager_Get_Employees_Details(string employee_id);
+void Manager_Get_Employees_Details();
 //employer
 void Employer_Menu(string employer_id);
 bool Employer_Check_Availability(string employee_id, string date, string proffesion, int hourly_wage);
@@ -580,14 +580,13 @@ void Employee_Menu(string employee_id) {
 			Edit_Account(employee_id);
 			break;
 		case 2:
-			//print history
+			Employee_Salary_History(employee_id);
 			break;
 		case 3:
 			Employee_Inquiries_Menu(employee_id);
 			break;
 		case 4:
 			Employee_Employment_History(employee_id);
-			//Employee_Salary_History(employee_id);
 			break;
 		case 5:
 			Employee_Shift(employee_id);
@@ -598,6 +597,8 @@ void Employee_Menu(string employee_id) {
 		case 7:
 			break;
 		default:
+			cout << "Invalid value. Please try again. Enter your choice: 1-7." << endl;
+			cin >> choice;
 			break;
 		}
 	} while (choice != 7);
@@ -646,7 +647,7 @@ void Employee_Inquiries_Menu(string employee_id) {
 	} while (choice != 3);
 }
 
-void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.g
+void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -762,10 +763,7 @@ void Employee_Employment_History(string employee_id)
 			int length_of_work = data["working hours"].size();
 			for (size_t j = 0; j < length_of_work; j++)
 			{
-				cout << "Work Number " << j << ":" << endl;
-				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
-				cout << "Total working hours: " << data["working hours"][j] << endl;
-				//total_working_hour += data["working hours"][j].as_double();
+				cout <<j+1<< "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] <<"          "<< "Total working hours: " << data["working hours"][j] << endl;;
 			}
 		}
 	}
@@ -1038,7 +1036,16 @@ void insert_employee_rating(string employee_id, int rate)
 //manager functions**************************************************************************************************
 void Manager_Menu(string manager_id)
 {
-	int choice;
+	string path = "./database.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	int choice,select;
 	do {
 		cout << "Manager Menu!" << endl;
 		cout << "Please enter your choice:" << endl;
@@ -1057,14 +1064,122 @@ void Manager_Menu(string manager_id)
 			break;
 		case 2:
 			Manager_Statistics();
-			//statistics
 			break;
 		case 3:
-			//Manage Inquiries
 			Manage_Inquiries_Status();
 			break;
 		case 4:
-			//View/edit employee details
+			cout << "Please enter your choice:" << endl;
+			cout << "1.view employee details" << endl;
+			cout << "2.edit employee details" << endl;
+			cout << "3.back" << endl;
+			cin >> select;
+			if (select != 1 && select != 2 && select != 3)
+			{
+				do
+				{
+					cout << "Error! Invalid input!" << endl<<endl;
+					cout << "Please enter your choice:" << endl;
+					cout << "1.view employee details" << endl;
+					cout << "2.edit employee details" << endl;
+					cout << "3.back" << endl;
+					cin >> select;
+
+				} while (select != 1 && select != 2 && select != 3);
+
+			}
+			if (select == 1)
+			{
+				Manager_Get_Employees_Details();
+				cout << "Would you like to edit employee details?" << endl;
+				cout << "Please enter your choice:" << endl;
+				cout << "1.yes." << endl;
+				cout << "2.No. go back to menu" << endl;
+				cin >> select;
+				if (select != 1 && select != 2)
+				{
+					do
+					{
+						cout << "Error! Invalid input!" << endl << endl;
+						cout << "Please enter your choice:" << endl;
+						cout << "Would you like to edit employee details?" << endl;
+						cout << "1.yes." << endl;
+						cout << "2.No. go back to menu" << endl;
+						cin >> select;
+
+					} while (select != 1 && select != 2 );
+
+				}
+				if (select == 1)
+					select = 2;
+				if (select == 2)
+					select = 3;
+			}
+			if (select == 2)
+			{
+				bool flag = false;
+				string employee_id;
+				do
+				{
+					flag = false;
+					cout << "Enter the ID number of the employee who wants to edit his details:  ";
+					cin >> employee_id;
+					for (std::size_t i = 0; i < alldata.size(); ++i)
+					{
+						json& data = alldata[i];
+						if (data["id"] == employee_id && data["type"] == "employee")
+						{
+							Manager_Edit_Employee(employee_id);
+							flag = true;
+							break;
+						}
+						if (!flag)
+						{
+							cout << "No employee with this ID number in the system"<<endl;
+							cout << "Would you like to edit another employee details?" << endl;
+							cout << "1.yes." << endl;
+							cout << "2.No. go back to menu" << endl;
+							if (select != 1 && select != 2)
+							{
+								do
+								{
+									cout << "Error! Invalid input!" << endl << endl;
+									cout << "Please enter your choice:" << endl;
+									cout << "Would you like to edit another employee details?" << endl;
+									cout << "1.yes." << endl;
+									cout << "2.No. go back to menu" << endl;
+									cin >> select;
+
+								} while (select != 1 && select != 2);
+
+							}
+						}
+						else
+						{
+							cout << "Would you like to edit another employee details?" << endl;
+							cout << "1.yes." << endl;
+							cout << "2.No. go back to menu" << endl;
+							if (select != 1 && select != 2)
+							{
+								do
+								{
+									cout << "Error! Invalid input!" << endl << endl;
+									cout << "Please enter your choice:" << endl;
+									cout << "Would you like to edit another employee details?" << endl;
+									cout << "1.yes." << endl;
+									cout << "2.No. go back to menu" << endl;
+									cin >> select;
+
+								} while (select != 1 && select != 2);
+
+							}
+						}
+							
+					}
+				} while (select!=2);
+				
+				
+			}
 			break;
 		case 5:
 			cout << "Enter your choice:" << endl;
@@ -1091,7 +1206,7 @@ void Manager_Menu(string manager_id)
 			cout << "Back to login screen" << endl;
 			break;
 		default:
-			cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
+			cout << "Invalid value. Please try again. Enter your choice: 1-7." << endl;
 			cin >> choice;
 			break;
 		}
@@ -1112,9 +1227,8 @@ void Manager_Guide()
 	cout << "-----------------------------------" << endl << endl;
 }
 
-void Manager_Get_Employees_Details(string employee_id)
+void Manager_Get_Employees_Details()
 {
-	bool flag = false;
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -1124,22 +1238,23 @@ void Manager_Get_Employees_Details(string employee_id)
 	}
 	json alldata = json::parse(is);
 
+	int counter = 0;
+	cout << "List of all the employees in the company: " << endl << endl;
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
-		if (data["id"] == employee_id)
+		if (data["type"] == "employee")
 		{
-			flag = true;
-			cout << "-ID : " << data["id"] << endl;
-			cout << "-First Name : " << data["first name"] << endl;
-			cout << "-Last Name : " << data["last name"] << endl;
-			cout << "-profession : " << data["profession"] << endl;
-			//cout << "-Salary : " << Salary_Calc(employee_id) << "NIS" << endl ; // Need a Matan's function : "Salary_Calc"
+			counter++;
+			cout << "employee number ." <<counter<<".:" << endl;
+			cout << "-ID : " << data["id"].as_string() << endl;
+			cout << "-First Name : " << data["first name"].as_string() << endl;
+			cout << "-Last Name : " << data["last name"].as_string() << endl;
+			cout << "-ID : " << data["id"].as_string() << endl;
+			cout << "-profession : " << data["profession"].as_string() << endl<<endl;
 		}
-
-		if (flag)
-			break;
 	}
+	cout << "-----------------------------------------" << endl << endl;
 }
 
 void Manage_Inquiries_Status() {
@@ -1234,12 +1349,12 @@ void Manager_Edit_Employee(string employee_id)
 			int choice;
 			do
 			{
-				cout << "Please choose which employee details you xant to change :" << endl;
+				cout << "Please choose which employee details you want to change :" << endl;
 				cout << "1.First Name" << endl;
 				cout << "2.Last Name" << endl;
 				cout << "3.ID" << endl;
 				cout << "4.Hourly Wage" << endl;
-				cout << "5.Type" << endl;
+				cout << "5.profession" << endl;
 				cout << "6.Exit" << endl;
 				cin >> choice;
 
@@ -1356,11 +1471,11 @@ void Manager_Edit_Employee(string employee_id)
 				case 5:
 				{
 					//edit type
-					cout << "Enter the new type:" << endl;
-					string new_type;
-					cin >> new_type;
+					cout << "Enter the new profession:" << endl;
+					string new_profession;
+					cin >> new_profession;
 					std::error_code ec;
-					jsonpointer::replace(data, "/type", json(new_type), ec);
+					jsonpointer::replace(data, "/profession", json(new_profession), ec);
 					if (ec)
 						cout << ec.message() << std::endl;
 					else
@@ -1372,11 +1487,11 @@ void Manager_Edit_Employee(string employee_id)
 				break;
 
 				case 6:
-					cout << "Good Bye.";
+					cout << "back to menu";
 					break;
 
 				default:
-					cout << "Invalid value. Please try again. Enter your choice: 1-5." << endl;
+					cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
 					cin >> choice;
 				}
 
@@ -1697,7 +1812,8 @@ void Employer_Menu(string employer_id)
 			cout << "Back to login screen" << endl;
 			break;
 		default:
-			cout << "Wrong choice, try again" << endl;
+			cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
+			cin >> choice;
 			break;
 		}
 	} while (choice != 6);
@@ -2080,7 +2196,6 @@ void Employer_Employment_History(string employer_id)
 //main
 int main()
 {
-	Employer_rate_employee("985621855");
 	Logo();
 	Login();
 	return 0;
