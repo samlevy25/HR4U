@@ -54,10 +54,12 @@ void insert_employee_rating(string employee_id, int rate);
 //manager
 void Manager_Menu(string manager_id);
 void Manager_Guide();
+void Manage_Requests(string subject, json& data);
 void Manage_Inquiries_Status();
 void Manager_Edit_Employee(string employee_id);
 void Manager_Statistics();
 void Manager_Get_Employees_Details();
+void Add_New_Employee();
 //employer
 void Employer_Menu(string employer_id);
 bool Employer_Check_Availability(string employee_id, string date, string proffesion, int hourly_wage);
@@ -646,14 +648,13 @@ void Employee_Inquiries_Menu(string employee_id) {
 			Employee_Add_Inquiries(employee_id);
 			break;
 		default:
-			cout << "Invalid input.Please try again,Enter your choice 1-3:" << endl;
-			cin >> choice;
 			break;
 		}
 	} while (choice != 3);
 }
 
-void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.
+
+void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.g
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -716,17 +717,46 @@ void Employee_Add_Inquiries(string employee_id)
 				switch (choice)
 				{
 				case 1: {
-					string body;
 					string subject;
+					int sub_choice;
 					const string status = "in process";
-					cout << "please enter your inquiry subject" << endl;
-					cin.ignore();
-					getline(cin, subject);
-					cout << "please specify your inquiry:(up to 250 letters)" << endl;
+					cout << "please choose your inquiry subject" << endl;
+					cout << "1.Vacation/Holiday" << endl;
+					cout << "2.Sick leave" << endl;
+					cout << "3.Salary issue" << endl;
+					cout << "4.Attendence clock issue" << endl;
+					cout << "5.Other" << endl;
+					cin >> sub_choice;
+
+					switch (sub_choice) {
+					case 1:
+						subject = "Vacation/Holiday";
+						cout << "Subject:" << subject << endl;
+						break;
+					case 2:
+						subject = "Sick leave";
+						cout << "Subject:" << subject << endl;
+						break;
+					case 3:
+						subject = "Salary issue";
+						cout << "Subject:" << subject << endl;
+						break;
+					case 4:
+						subject = "Attendence clock issue";
+						cout << "Subject:" << subject << endl;
+						break;
+					case 5:
+						subject = "Other";
+						cout << "Subject:" << subject << endl;
+						break;
+					}
+
+					string body;
+					cout << "Please specify your inquiry:(up to 250 letters)" << endl;
 					cin.ignore();
 					getline(cin, body);
 
-					while (subject.length() > 250)
+					while (body.length() > 250)
 					{
 						cout << "your inquiry body is way too long. please try again" << endl;
 						cout << "please specify your inquiry:(up to 250 letters)" << endl;
@@ -750,6 +780,7 @@ void Employee_Add_Inquiries(string employee_id)
 		}
 	}
 }
+
 
 void Employee_Employment_History(string employee_id)
 {
@@ -1208,6 +1239,7 @@ void Manager_Menu(string manager_id)
 				switch (choice) {
 				case 1:
 					//add employee
+					Add_New_Employee();
 					break;
 				case 2:
 					//remove employee
@@ -1227,6 +1259,172 @@ void Manager_Menu(string manager_id)
 			break;
 		}
 	} while (choice != 7);
+}
+
+void Add_New_Employee()
+{
+	//personal info manager must provide for adding a new employee
+	string address;
+	string email;
+	string emergencyContactName;
+	string emergencyContactPhone;
+	int hourlyWage;
+	string firstName;
+	string lastName;
+	string id;
+	string resetPasswordDetails[3];
+	string type = "employee";
+	string phone;
+	string profession;
+	//------------------------------------------------------------
+
+	cout << "ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
+	cout << "Profession - ";
+	cin >> profession;
+	cout << "First Name - ";
+	cin >> firstName;
+	cout << "Last Name - ";
+	cin >> lastName;
+	cout << "ID - ";
+	cin >> id;
+	cout << "Email - ";
+	cin >> email;
+	cout << "Address - ";
+	cin >> address;
+	cout << "Phone - ";
+	cin >> phone;
+	cout << "Hourly Wage - ";
+	cin >> hourlyWage;
+	cout << "Emergency contact:" << endl;
+	cout << "Name - ";
+	cin >> emergencyContactName;
+	cout << "Phone - ";
+	cin >> emergencyContactPhone;
+	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
+	cout << "1.What is your mother`s name?" << endl;
+	cin >> resetPasswordDetails[0];
+	cout << "2.What is your date of birth?(format:XX.XX.XXXX)" << endl;
+	cin >> resetPasswordDetails[1];
+	cout << "3.What's your main hobby?" << endl;
+	cin >> resetPasswordDetails[2];
+	//end of asking for personal info from the manager
+
+	//identification details the system must provide a new employee
+	string password = GenRandomChars(8);
+	string userName = firstName + GenRandomChars(2);
+	//-------------------------------------------------------------
+
+
+	std::ofstream os("./temp.json",  //Creates a temp json file to hold the new object(employee) we want to create
+		std::ios_base::out | std::ios_base::trunc);
+	assert(os);
+
+	compact_json_stream_encoder encoder(os); // no indent
+
+
+	//start of building the json object(the new employee)
+	encoder.begin_object();
+	encoder.key("address");
+	encoder.string_value(address);
+	encoder.key("amount of rating");
+	encoder.int64_value(0);
+	encoder.key("day working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("email");
+	encoder.string_value(email);
+	encoder.key("emergency contact name");
+	encoder.string_value(emergencyContactName);
+	encoder.key("emergency contact phone");
+	encoder.string_value(emergencyContactPhone);
+	encoder.key("end hour working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("end minute working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("first name");
+	encoder.string_value(firstName);
+	encoder.key("hourly wage");
+	encoder.int64_value(hourlyWage);
+	encoder.key("id");
+	encoder.string_value(id);
+	encoder.key("inquiries body");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("inquiries status");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("inquiries subject");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("last name");
+	encoder.string_value(lastName);
+	encoder.key("month working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("number of rating");
+	encoder.int64_value(0);
+	encoder.key("password");
+	encoder.string_value(password);
+	encoder.key("phone");
+	encoder.string_value(phone);
+	encoder.key("previous month for salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("previous salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("previous year for salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("profession");
+	encoder.string_value(profession);
+	encoder.key("reset password details");
+	encoder.begin_array();
+	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
+		encoder.string_value(resetPasswordDetails[i]);
+	}
+	encoder.end_array();
+	encoder.key("shift flag");
+	encoder.bool_value(false);
+	encoder.key("start hour working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("start minute working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("type");
+	encoder.string_value(type);
+	encoder.key("unavailability");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("user name");
+	encoder.string_value(userName);
+	encoder.key("working hours");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("year working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.end_object();
+	encoder.flush();
+	os.close();
+
+
+	string path = "./temp.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+	}
+	json jsontemp = json::parse(is);
+
+	json alldata = read_file();
+	alldata.push_back(jsontemp);
+	//cout << pretty_print(alldata);
+	path = "./database.json";
+	write_to_file(alldata, path);
 }
 
 void Manager_Guide()
@@ -1273,6 +1471,50 @@ void Manager_Get_Employees_Details()
 	cout << "-----------------------------------------" << endl << endl;
 }
 
+void Manage_Requests(string subject, json& data) {
+	if ((subject == "\"Vacation/Holiday\"") || (subject == "\"Sick leave\"")) {
+		int num;
+		cout << "According to the approval, please enter how many days do you approve:" << endl;
+		cin >> num;
+		cout << "Please enter all " << num << " dates the employee will be unavailable for work: (in format XX.XX.XXXX)" << endl;
+		while (num != 0) {
+			string date; //the manager will have to enter all the dates day by day manually
+			cout << "Date:" << endl;
+			cin >> date;
+			data["unavailability"].push_back(date); //puts it in the unavailability dates of the employee to work
+			num--;
+		}
+	}
+	else if (subject == "\"Salary issue\"") {
+		//float award;
+		//cout << "According to the approval,enter how much(in $) you want to award the employee:" << endl;
+		//cin >> award;
+		//NEED TO FINISH, WAITING FOR MATAN`S function
+	}
+	else if (subject == "\"Attendence clock issue\"") {
+		cout << "According to the approval, please enter how many hours do you approve:" << endl;
+		float hours;
+		cin >> hours;
+		int day, month, year;
+		cout << "Enter date of work day:" << endl;
+		cout << "Enter day:";
+		cin >> day;
+		cout << " Enter month:";
+		cin >> month;
+		cout << " Enter year:";
+		cin >> year;
+
+		int size = data["day working"].size();
+		for (int i = 0; i < size; ++i)
+		{
+			if (data["day working"][i] == day && data["month working"][i] == month && data["year working"][i] == year)
+			{
+				data["working hours"][i] = hours;
+			}
+		}
+	}
+}
+
 void Manage_Inquiries_Status() {
 	std::string path = "./database.json";
 	std::fstream is(path);
@@ -1296,12 +1538,14 @@ void Manage_Inquiries_Status() {
 	string employee_id;
 	cout << "Enter the id you want to edit:" << endl;
 	cin >> employee_id;
+	bool flag = false; //if the employee has been found/not
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
 
 		if (data["id"] == employee_id)
 		{
+			flag = true;
 			int inquiries_length = data["inquiries status"].size(); //inquiries array length
 			if (inquiries_length == 0)
 			{
@@ -1312,19 +1556,17 @@ void Manage_Inquiries_Status() {
 				cout << "Enter the inquiry number you would like to update (by status)" << endl;
 				int i; //choice of specific inquiry index
 				cin >> i;
-				while (i > inquiries_length) { //checks the if the inquiry number is in the range
+				while (i >= inquiries_length) { //checks the if the inquiry number is in the range
 					cout << "Error. Inquiry number doesn`t exist. please try again" << endl;
 					cin >> i;
 				}
-
 				string ans;
-				cout << "Enter your choice (approved/disapproved)" << endl;
+				cout << "Enter your choice (approved/declined)" << endl;
 				cin >> ans;
 
 				std::error_code ec;
 				string inquiry_to_replace = "/inquiries status/";
-				inquiry_to_replace += to_string(i);
-				cout << inquiry_to_replace; //what inquiry status we want to replace
+				inquiry_to_replace += to_string(i); //what inquiry status we want to replace
 
 				jsonpointer::replace(data, inquiry_to_replace, json(ans), ec); //changes specific inquiry status
 				if (ec)
@@ -1333,15 +1575,23 @@ void Manage_Inquiries_Status() {
 				}
 				else
 				{
-					cout << "Changes saved.Thank you,Manager." << endl;
+					if (ans == "approved") { //if the manager approved the inquiry , he needs to make neccessry changes.
+						string subject = data["inquiries subject"][i].to_string();
+						Manage_Requests(subject, data); //for making the neccessry changes
+						cout << "Your employee inquiry has been approved.You made the neccessary changes." << endl;
+					}
+					else {
+						cout << "Your employee inquiry has been disclined." << endl;
+					}
+					cout << "Thank you,Manager." << endl;
 					write_to_file(alldata, path); //updates inquiries in file
+					break;
 				}
 			}
 		}
-
-
 	}
-
+	if (!flag)
+		cout << "employee not found in this id." << endl;
 }
 
 void Manager_Edit_Employee(string employee_id)
