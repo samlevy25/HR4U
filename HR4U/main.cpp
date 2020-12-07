@@ -1307,6 +1307,7 @@ void Add_New_Employee()
 	cin >> resetPasswordDetails[1];
 	cout << "3.What's your main hobby?" << endl;
 	cin >> resetPasswordDetails[2];
+	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
 	//end of asking for personal info from the manager
 
 	//identification details the system must provide a new employee
@@ -1425,6 +1426,8 @@ void Add_New_Employee()
 	//cout << pretty_print(alldata);
 	path = "./database.json";
 	write_to_file(alldata, path);
+
+	cout << "NEW EMPLOYEE WAS SUCCESSFULY ADDED,thank you,Manager!" << endl;
 }
 
 void Manager_Guide()
