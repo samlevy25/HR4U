@@ -49,11 +49,12 @@ void Manager_Menu(string manager_id);
 void Employer_Menu(string employer_id);
 void Manage_Inquiries_Status();
 float Employee_Rate(string employee_id);
-void Employer_Search();
+void Employer_Search(string employer_id);
 void Manager_Statistics();
 void Employee_Shift(string employee_id);
 void Employee_Salary_History(string employee_id);
 void Employee_Employment_History(string employee_id);
+void Manager_Get_Employees_Details(string employee_id);
 //dont forget to declar
 
 
@@ -362,7 +363,7 @@ void Login()
 					}
 					else
 					{
-						write_to_file(alldata, path); //updates user name 
+						write_to_file(alldata, path); //updates password
 					}
 
 				}
@@ -765,6 +766,35 @@ void Manager_Menu(string manager_id)
 			break;
 		}
 	} while (choice != 6);
+}
+void Manager_Get_Employees_Details(string employee_id)
+{
+	bool flag = false;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			flag = true;
+			cout << "-ID : " << data["id"] << endl;
+			cout << "-First Name : " << data["first name"] << endl;
+			cout << "-Last Name : " << data["last name"] << endl;
+			cout << "-Type : " << data["type"] << endl;
+			//cout << "-Salary : " << Salary_Calc(employee_id) << "NIS" << endl ; // Need a Matan's function : "Salary_Calc"
+		}
+
+		if (flag)
+			break;
+	}
 }
 
 void Manage_Inquiries_Status() {
@@ -1213,23 +1243,7 @@ void Employer_Menu(string employer_id)
 		switch (choice)
 		{
 		case 1:
-			cout << "Enter your choice:" << endl << "1.Search employee" << endl << "2.Book employee" << endl << "3.Exit" << endl;
-			cin >> choice;
-			if (choice != 3)
-			{
-				switch (choice)
-				{
-				case 1:
-					//search employee
-					break;
-				case 2:
-					//book employee
-					break;
-				default:
-					cout << "Wrong choice, try again" << endl;
-					cin >> choice;
-				}
-			}
+			Employer_Search(employer_id);
 			break;
 		case 2:
 			//rate employee
@@ -1283,7 +1297,7 @@ bool Employer_Check_Availability(string employee_id,string date,string professio
 
 }
 
-void Employer_Search()
+void Employer_Search(string employer_id)
 {
 	string path = "./database.json";
 	fstream is(path);
@@ -1350,8 +1364,20 @@ void Employer_Search()
 							{
 								if (data["id"] == choice2)
 								{
-									data["unavailability"].push_back(date);
+									data["unavailability"].push_back(date);//update employee
 									write_to_file(alldata, path);
+									//update employer
+									for (std::size_t i = 0; i < alldata.size(); ++i)
+									{
+										if (data["id"] == employer_id)
+										{
+											data["hierd id"].push_back(choice2);
+											data["hierd proffesion"].push_back(proffesion);
+											data["hiring date"].push_back(date);
+											data["hiring rate"].push_back(0);//temp rate until he will rate after the employee will finish the job
+											write_to_file(alldata, path);
+										}
+									}
 									flag = true;
 									break;
 								}
