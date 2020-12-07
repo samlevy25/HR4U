@@ -567,7 +567,8 @@ void Employee_Menu(string employee_id) {
 		cout << "3.Inquiries" << endl;
 		cout << "4.History" << endl;
 		cout << "5.Exit/Enter shift" << endl;
-		cout << "6.EXIT SYSTEM" << endl;
+		cout << "6.User guide" << endl;
+		cout << "7.EXIT SYSTEM" << endl;
 		cin >> choice;
 		system("color 9");
 		switch (choice) {
@@ -587,10 +588,12 @@ void Employee_Menu(string employee_id) {
 		case 5:
 			Employee_Shift(employee_id);
 			break;
+		case 6:
+			break;
 		default:
 			break;
 		}
-	} while (choice != 6);
+	} while (choice != 7);
 }
 
 void Employee_Inquiries_Menu(string employee_id) {
@@ -716,6 +719,84 @@ void Employee_Add_Inquiries(string employee_id)
 	}
 }
 
+void Employee_Employment_History(string employee_id)
+{
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			int length_of_work = data["working hours"].size();
+			for (size_t j = 0; j < length_of_work; j++)
+			{
+				cout << "Work Number " << j << ":" << endl;
+				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
+				cout << "Total working hours: " << data["working hours"][j] << endl;
+				//total_working_hour += data["working hours"][j].as_double();
+			}
+		}
+	}
+}
+
+float Employee_Rate(string employee_id)
+{
+	double amount;
+	double number_of_rating;
+	float average_rating=0;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return 0;
+	}
+	json alldata = json::parse(is);
+
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			amount = data["amount of rating"].as_double();
+			number_of_rating = data["number of rating"].as_double();
+			average_rating = (float)(amount / number_of_rating);
+		}
+	}
+
+	return average_rating;
+}
+
+string Get_employee_name(string employee_id)
+{
+	string path = "./database.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+		return "Error";
+	}
+	json alldata = json::parse(is);
+	string employee_name = "Error-no suce employee";
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			employee_name = data["first name"].as_string() + " " + data["last name"].as_string();
+		}
+	}
+	return employee_name;
+}
+
+
 //manager functions**************************************************************************************************
 void Manager_Menu(string manager_id)
 {
@@ -728,7 +809,8 @@ void Manager_Menu(string manager_id)
 		cout << "3.Manage Inquiries" << endl;
 		cout << "4.View/edit employee details" << endl;
 		cout << "5.Add/Remove employee" << endl;
-		cout << "6.EXIT SYSTEM" << endl;
+		cout << "6.User guide" << endl;
+		cout << "7.EXIT SYSTEM" << endl;
 		cin >> choice;
 		system("color 9");
 		switch (choice) {
@@ -765,6 +847,8 @@ void Manager_Menu(string manager_id)
 			}
 			break;
 		case 6:
+			break;
+		case 7:
 			cout << "Back to login screen" << endl;
 			break;
 		default:
@@ -772,7 +856,7 @@ void Manager_Menu(string manager_id)
 			cin >> choice;
 			break;
 		}
-	} while (choice != 6);
+	} while (choice != 7);
 }
 void Manager_Get_Employees_Details(string employee_id)
 {
@@ -1051,6 +1135,78 @@ void Manager_Edit_Employee(string employee_id)
 	} // end of "for"
 } // end of "Manager_Edit_Employee"
 
+void Manager_Statistics()
+{
+	int choice;
+	float average_hourly_wage = 0;
+	int counter_total_employee = 0;
+	float counter_employee = 0;
+	int counter_manager = 0;
+	float total_working_hour = 0;
+	std::string path = "./database.json";
+	std::fstream is(path);
+	if (!is)
+	{
+		std::cout << "Cannot open " << path << std::endl;
+		return;
+	}
+	json alldata = json::parse(is);
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+
+		json& data = alldata[i];
+		if (data["type"] == "employee")
+		{
+			counter_total_employee++;
+			counter_employee++;
+			int hour_length = data["working hours"].size();
+			cout << hour_length << endl;
+			average_hourly_wage += data["hourly wage"].as_double();
+			for (size_t j = 0; j < hour_length; j++)
+			{
+				total_working_hour += data["working hours"][j].as_double();
+			}
+		}
+		if (data["type"] == "manager")
+		{
+			counter_total_employee++;
+			counter_manager++;
+		}
+	}
+	do
+	{
+		cout << "1.Total Employee In company" << endl;
+		cout << "2.Total working Hours" << endl;
+		cout << "3.Average Hourly Wage" << endl;
+		cout << "4.Exit" << endl;
+		cin >> choice;
+		if (choice == 1)
+		{
+			cout << "Total Manager: " << counter_manager << endl;
+			cout << "Total Regular Employee: " << counter_employee << endl;
+			cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl;
+		}
+		else if (choice == 2)
+		{
+			cout << "Total working hours is: " << total_working_hour << "hours" << endl;
+		}
+		else if (choice == 3)
+		{
+			cout << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl;
+		}
+		else if (choice == 4)
+		{
+			break;
+		}
+		else
+		{
+			cout << "Invalid value. Please try again. Enter your choice: 1-4." << endl;
+			cin >> choice;
+			break;
+		}
+	} while (choice != 4);
+}
+
 //employer functions*************************************************************************************************
 void Employer_Edit_Account(string user_id)
 {
@@ -1262,13 +1418,15 @@ void Employer_Menu(string employer_id)
 			//Edit_Account(string employer_id)    
 			break;
 		case 5:
+			break;
+		case 6:
 			cout << "Back to login screen" << endl;
 			break;
 		default:
 			cout << "Wrong choice, try again" << endl;
 			break;
 		}
-	} while (choice != 5);
+	} while (choice != 6);
 }
 
 bool Employer_Check_Availability(string employee_id,string date,string profession, int hourly_wage)//Checking an employee's availability on the selected date 
@@ -1466,104 +1624,6 @@ void Employer_Search(string employer_id)
 
 }
 
-float Employee_Rate(string employee_id)
-{
-	double amount;
-	double number_of_rating;
-	float average_rating;
-	std::string path = "./database.json";
-	std::fstream is(path);
-	if (!is)
-	{
-		std::cout << "Cannot open " << path << std::endl;
-		return 0;
-	}
-	json alldata = json::parse(is);
-
-	for (std::size_t i = 0; i < alldata.size(); ++i)
-	{
-		json& data = alldata[i];
-		if (data["id"] == employee_id)
-		{
-			amount = data["amount of rating"].as_double();
-			number_of_rating = data["number of rating"].as_double();
-			average_rating = (float)(amount /number_of_rating);
-		}
-		}
-			
-	return average_rating;
-}
-void Manager_Statistics()
-{
-	int choice;
-	float average_hourly_wage = 0;
-	int counter_total_employee = 0;
-	float counter_employee = 0;
-	int counter_manager = 0;
-	float total_working_hour = 0;
-	std::string path = "./database.json";
-	std::fstream is(path);
-	if (!is)
-	{
-		std::cout << "Cannot open " << path << std::endl;
-		return ;
-	}
-	json alldata = json::parse(is);
-	for (std::size_t i = 0; i < alldata.size(); ++i)
-	{
-
-		json& data = alldata[i];
-		if (data["type"] == "employee")
-		{
-			counter_total_employee++;
-			counter_employee++;
-			int hour_length = data["working hours"].size();
-			cout << hour_length << endl;
-			average_hourly_wage += data["hourly wage"].as_double(); 
-			for (size_t j = 0; j < hour_length; j++)
-			{
-				total_working_hour += data["working hours"][j].as_double();
-			}
-		}
-		if (data["type"] == "manager")
-		{
-			counter_total_employee++;
-			counter_manager++;
-		}
-	}
-		do
-		{
-			cout << "1.Total Employee In company" << endl;
-			cout << "2.Total working Hours" << endl;
-			cout << "3.Average Hourly Wage" << endl;
-			cout << "4.Exit" << endl;
-			cin >> choice;
-			if (choice == 1)
-			{
-				cout << "Total Manager: " << counter_manager << endl;
-				cout << "Total Regular Employee: " << counter_employee << endl;
-				cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl;
-			}
-			else if (choice == 2)
-			{
-				cout << "Total working hours is: " << total_working_hour << "hours" << endl;
-			}
-			else if (choice == 3)
-			{
-				cout << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl;
-			}
-			else if (choice == 4)
-			{
-				break;
-			}
-			else
-			{
-				cout << "Invalid value. Please try again. Enter your choice: 1-4." << endl;
-				cin >> choice;
-				break;
-			}
-		} while (choice != 4);
-}
 void Employee_Shift(string employee_id) 
 {
 	int choice;
@@ -1729,7 +1789,176 @@ void Employee_Salary_History(string employee_id)
 	}
 }
 
-void Employee_Employment_History(string employee_id)
+void Employer_rate_employee(string employer_id)
+{
+	string path = "./database.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+		return;
+	}
+	json alldata = json::parse(is);
+
+	string employee_id;
+	int length, rate;
+	string rate_to_replace = "/hiring rate/";
+	double rating;
+	string print_rating;
+	int choice;
+
+	cout << "List of employees you employed:" << endl << endl;
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employer_id)
+		{
+			length = data["hierd id"].size();
+			for (int i = 0;i < length;i++)
+			{
+				cout << "Row number    DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
+
+
+				rating = data["hiring rate"][i].as_double();
+				if (rating == 0)
+					print_rating = "No rating";
+				else
+					print_rating = data["hiring rate"][i].as_string();
+
+				cout << "  " << i + 1 << data["hiring date"][i].as_string() << "       " << data["hierd id"][i].as_string() << "            " << print_rating << "                    " << data["hierd proffesion"][i].as_string() << endl;
+
+			}
+			cout << "Enter the number in the line that shows the employee you hired on a specific date that you would like to rank: " << endl;
+			cin >> choice;
+			if (choice > (i + 1) || choice < (i + 1))
+			{
+				do
+				{
+					cout << "Error! not a number between " << 1 << " to " << (i + 1) << endl;
+
+				} while (choice > (i + 1) || choice < (i + 1));
+			}
+			rating = data["hiring rate"][choice - 1].as_double();
+			if (rating == 0)
+			{
+				employee_id = data["hierd id"][choice - 1].as_string();
+				cout << "You choose to rank " << Get_employee_name(employee_id) << ". The date you hired " << Get_employee_name(employee_id) << " is: " << data["hiring date"] << endl << endl;
+				cout << "What is your level of satisfaction with the service? " << endl;
+				cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
+				cin >> rate;
+				if (rate > 5 || rate < 1)
+				{
+					do
+					{
+						cout << "Error! not a number between 1 to 5";
+						cout << "What is your level of satisfaction with the service? " << endl;
+						cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
+						cin >> rate;
+					} while (rate > 5 || rate < 1);
+				}
+				rate_to_replace += to_string(i);
+				error_code ec;
+				replace(data, rate_to_replace, json(rate), ec);
+				if (ec)
+				{
+					cout << ec.message() << std::endl;
+				}
+				else
+				{
+					cout << "The rating was successfully received! Thank you, your opinion is important to us" << endl << endl;
+					write_to_file(alldata, path);
+					//loop
+				}
+			}
+			else
+			{
+
+			}
+
+
+		}
+	}
+
+
+}
+
+/*
+for (int i = 0;i < length;i++)
+			{
+				if (data["hierd id"][i] == employee_id)
+					counter++;
+			}
+			if (counter != 0)//the employee has been hierd by this employer
+			{
+				if (counter == 1)//the employee has been hierd just one time by this employer
+				{
+					for (int i = 0;i < length;i++)
+					{
+						if (data["hierd id"][i] == employee_id)
+						{
+							if (data["hiring rate"][i].as_string() == "0")
+							{
+								cout << "You choose to rank " << Get_employee_name(employee_id) << ". The date you hired " << Get_employee_name(employee_id) << " is: " << data["hiring date"] << endl << endl;
+								cout << "What is your level of satisfaction with the service? " << endl;
+								cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
+								cin >> rate;
+								if (rate > 5 || rate < 1)
+								{
+									do
+									{
+										cout << "Error! not a number between 1 to 5";
+										cout << "What is your level of satisfaction with the service? " << endl;
+										cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
+										cin >> rate;
+									} while (rate > 5 || rate < 1);
+								}
+								rate_to_replace += to_string(i);
+								error_code ec;
+								replace(data, rate_to_replace, json(rate), ec);
+								if (ec)
+								{
+									cout << ec.message() << std::endl;
+								}
+								else
+								{
+									cout << "The rating was successfully received! Thank you, your opinion is important to us";
+									write_to_file(alldata, path);
+									return;
+								}
+							}
+							else
+							{
+								cout << "you already ranked " << Get_employee_name(employee_id) << " on the date "<< data["hiring date"] << endl;
+								//loop
+							}
+
+
+						}
+
+					}
+				}
+				else//The employee has been hierd more than once by this employer
+				{
+					for (int i = 1;i <= length;i++)
+					{
+						if (data["hierd id"][i-1] == employee_id)
+						{
+							cout << "You choose to rank " << Get_employee_name(employee_id) <<endl;
+							cout << "These are the dates you hierd "<< Get_employee_name(employee_id)<<": " << endl;
+							cout << i <<". "<< data["hiring date"][i - 1].as_string() << endl;
+						}
+					}
+				}
+
+			}
+			else//The employee was not hierd by this employer
+			{
+				cout << "You have not hired an employee with this ID number";
+				//add loop
+			}
+*/
+
+void Employer_Employment_History(string employer_id)
 {
 	std::string path = "./database.json";
 	std::fstream is(path);
@@ -1739,23 +1968,36 @@ void Employee_Employment_History(string employee_id)
 		return;
 	}
 	json alldata = json::parse(is);
+	bool flag = false;
+	double rating;
+	string print_rating;
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
-		if (data["id"] == employee_id)
+		if (data["id"] == employer_id)
 		{
-			int length_of_work = data["working hours"].size();
-			for (size_t j = 0; j < length_of_work; j++)
+			flag = true;
+
+			int lenght = (int)(data["hierd id"].size());
+
+			cout << "DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
+
+			for (int y = 0; y < lenght; ++y)
 			{
-				cout << "Work Number " << j << ":" << endl;
-				cout << "Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << endl;
-				cout << "Total working hours: " << data["working hours"][j] << endl;
-				//total_working_hour += data["working hours"][j].as_double();
+				rating = data["hiring rate"][y].as_double();
+				if (rating == 0)
+					print_rating = "No rating";
+				else
+					print_rating = data["hiring rate"][y].as_string();
+
+				cout << data["hiring date"][y].as_string() << "       " << data["hierd id"][y].as_string() << "            " << print_rating << "                    " << data["hierd id"][y].as_string() << endl;
 			}
 		}
+		if (flag)
+			break;
 	}
-}
 
+}
 
 //main
 int main()
