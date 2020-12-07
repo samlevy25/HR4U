@@ -565,9 +565,12 @@ bool Available_Date(string employee_id, string date)
 
 //employee functions**************************************************************************************************
 void Employee_Menu(string employee_id) {
+
+	string title = "Employee menu";
+	print_title(title);//only for printing colourful title
+
 	int choice;
 	do {
-		cout << "Employee Menu!" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Edit Account" << endl;
 		cout << "2.Salary" << endl;
@@ -1039,6 +1042,9 @@ void insert_employee_rating(string employee_id, int rate)
 //manager functions**************************************************************************************************
 void Manager_Menu(string manager_id)
 {
+	string title = "Manager menu";
+	print_title(title);//only for printing colourful title
+
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -1050,7 +1056,6 @@ void Manager_Menu(string manager_id)
 
 	int choice, select;
 	do {
-		cout << "Manager Menu!" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Edit your Account" << endl;
 		cout << "2.View company statistics" << endl;
@@ -1113,10 +1118,11 @@ void Manager_Menu(string manager_id)
 					} while (select != 1 && select != 2);
 
 				}
-				if (select == 1)
-					select = 2;
 				if (select == 2)
 					select = 3;
+				if (select == 1)
+					select = 2;
+
 			}
 			if (select == 2)
 			{
@@ -1130,55 +1136,62 @@ void Manager_Menu(string manager_id)
 					for (std::size_t i = 0; i < alldata.size(); ++i)
 					{
 						json& data = alldata[i];
-						if (data["id"] == employee_id && data["type"] == "employee")
+						if (data["type"] == "employee")
 						{
-							Manager_Edit_Employee(employee_id);
-							flag = true;
-							break;
-						}
-						if (!flag)
-						{
-							cout << "No employee with this ID number in the system" << endl;
-							cout << "Would you like to edit another employee details?" << endl;
-							cout << "1.yes." << endl;
-							cout << "2.No. go back to menu" << endl;
-							if (select != 1 && select != 2)
+							if (data["id"] == employee_id)
 							{
-								do
-								{
-									cout << "Error! Invalid input!" << endl << endl;
-									cout << "Please enter your choice:" << endl;
-									cout << "Would you like to edit another employee details?" << endl;
-									cout << "1.yes." << endl;
-									cout << "2.No. go back to menu" << endl;
-									cin >> select;
-
-								} while (select != 1 && select != 2);
-
+								Manager_Edit_Employee(employee_id);
+								flag = true;
+								break;
 							}
+
 						}
-						else
-						{
-							cout << "Would you like to edit another employee details?" << endl;
-							cout << "1.yes." << endl;
-							cout << "2.No. go back to menu" << endl;
-							if (select != 1 && select != 2)
-							{
-								do
-								{
-									cout << "Error! Invalid input!" << endl << endl;
-									cout << "Please enter your choice:" << endl;
-									cout << "Would you like to edit another employee details?" << endl;
-									cout << "1.yes." << endl;
-									cout << "2.No. go back to menu" << endl;
-									cin >> select;
-
-								} while (select != 1 && select != 2);
-
-							}
-						}
-
 					}
+					if (!flag)
+					{
+						cout << "No employee with this ID number in the system" << endl;
+						cout << "Would you like to edit another employee details?" << endl;
+						cout << "1.yes." << endl;
+						cout << "2.No. go back to menu" << endl;
+						cin >> select;
+						if (select != 1 && select != 2)
+						{
+							do
+							{
+								cout << "Error! Invalid input!" << endl << endl;
+								cout << "Please enter your choice:" << endl;
+								cout << "Would you like to edit another employee details?" << endl;
+								cout << "1.yes." << endl;
+								cout << "2.No. go back to menu" << endl;
+								cin >> select;
+
+							} while (select != 1 && select != 2);
+
+						}
+					}
+					else
+					{
+						cout <<endl<<endl<< "Would you like to edit another employee details?" << endl;
+						cout << "1.yes." << endl;
+						cout << "2.No. go back to menu" << endl;
+						cin >> select;
+						if (select != 1 && select != 2)
+						{
+							do
+							{
+								cout << "Error! Invalid input!" << endl << endl;
+								cout << "Please enter your choice:" << endl;
+								cout << "Would you like to edit another employee details?" << endl;
+								cout << "1.yes." << endl;
+								cout << "2.No. go back to menu" << endl;
+								cin >> select;
+
+							} while (select != 1 && select != 2);
+
+						}
+					}
+
+
 				} while (select != 2);
 
 
@@ -1532,7 +1545,6 @@ void Manager_Statistics()
 			counter_total_employee++;
 			counter_employee++;
 			int hour_length = data["working hours"].size();
-			cout << hour_length << endl;
 			average_hourly_wage += data["hourly wage"].as_double();
 			for (size_t j = 0; j < hour_length; j++)
 			{
@@ -1547,6 +1559,7 @@ void Manager_Statistics()
 	}
 	do
 	{
+		cout << endl << "Select Statistics:" << endl << endl;
 		cout << "1.Total Employee In company" << endl;
 		cout << "2.Total working Hours" << endl;
 		cout << "3.Average Hourly Wage" << endl;
@@ -1554,17 +1567,17 @@ void Manager_Statistics()
 		cin >> choice;
 		if (choice == 1)
 		{
-			cout << "Total Manager: " << counter_manager << endl;
+			cout <<endl<< "Total Manager: " << counter_manager << endl;
 			cout << "Total Regular Employee: " << counter_employee << endl;
-			cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl;
+			cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl<<endl;
 		}
 		else if (choice == 2)
 		{
-			cout << "Total working hours is: " << total_working_hour << "hours" << endl;
+			cout << endl << "Total working hours is: " << total_working_hour << "hours" << endl<<endl;
 		}
 		else if (choice == 3)
 		{
-			cout << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl;
+			cout << endl << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl<<endl;
 		}
 		else if (choice == 4)
 		{
@@ -2049,7 +2062,7 @@ void Employer_rate_employee(string employer_id)
 				if (length == 0)
 				{
 					cout << "You have not yet hired any employees" << endl;
-					cout<<"You are returned to the menu" << endl << endl;
+					cout << "You are returned to the menu" << endl << endl;
 					return;
 				}
 				else
@@ -2173,7 +2186,6 @@ void Employer_Employment_History(string employer_id)
 		return;
 	}
 	json alldata = json::parse(is);
-	bool flag = false;
 	double rating;
 	string print_rating;
 	for (std::size_t i = 0; i < alldata.size(); ++i)
@@ -2181,25 +2193,36 @@ void Employer_Employment_History(string employer_id)
 		json& data = alldata[i];
 		if (data["id"] == employer_id)
 		{
-			flag = true;
 
-			int lenght = (int)(data["hierd id"].size());
 
-			cout << "DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
-
-			for (int y = 0; y < lenght; ++y)
+			int length = (int)(data["hierd id"].size());
+			if (length == 0)
 			{
-				rating = data["hiring rate"][y].as_double();
-				if (rating == 0)
-					print_rating = "No rating";
-				else
-					print_rating = data["hiring rate"][y].as_string();
-
-				cout << data["hiring date"][y].as_string() << "       " << data["hierd id"][y].as_string() << "            " << print_rating << "                    " << data["hierd id"][y].as_string() << endl;
+				cout << "You have not yet hired any employees." << endl;
+				cout << "You are returned to menu" << endl << endl << endl;
+				return;
 			}
-		}
-		if (flag)
+			else
+			{
+				cout << "DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
+
+				for (int y = 0; y < length; ++y)
+				{
+					rating = data["hiring rate"][y].as_double();
+					if (rating == 0)
+						print_rating = "No rating";
+					else
+						print_rating = data["hiring rate"][y].as_string();
+
+					cout << data["hiring date"][y].as_string() << "       " << data["hierd id"][y].as_string() << "            " << print_rating << "                    " << data["hierd id"][y].as_string() << endl;
+				}
+				cout << "------------------------------------------" << endl << endl;
+			}
+
+
 			break;
+		}
+
 	}
 }
 

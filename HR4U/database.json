@@ -80,7 +80,7 @@
     }, 
     {
         "address": "ashkelon", 
-        "credit card number": "457897924355", 
+        "credit card number": "1284567345764246", 
         "email": "matan12@gmail.com", 
         "first name": "matan", 
         "hierd id": [], 
@@ -93,7 +93,7 @@
         "phone": "0529936782", 
         "reset password details": ["sason", "13.08.1992", "paint"], 
         "type": "employer", 
-        "user name": "matan39"
+        "user name": "matanDp"
     }, 
     {
         "address": "azrikam", 
@@ -105,7 +105,7 @@
         "end hour working": [15, 15, 15, 20, 20, 17, 23, 12, 12], 
         "end minute working": [13, 14, 17, 33, 58, 14, 40, 13, 14], 
         "first name": "bar", 
-        "hourly wage": 60, 
+        "hourly wage": 50, 
         "id": "206902355", 
         "inquiries body": ["ve checked my salary and found out 2000ils are missed", " would like to take a vacation on the 23-25.12", 
             "m very sick i cant work today"
