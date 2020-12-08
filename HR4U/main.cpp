@@ -39,6 +39,8 @@ bool check_card(string credit_card);
 bool check_phone(string phone);
 bool check_email(string email);
 void Edit_Account(string user_id);
+void Add_New_Employee();
+void Add_New_Employer();
 //employee
 void Employee_Guide();
 void Employee_Shift(string employee_id);
@@ -59,7 +61,6 @@ void Manage_Inquiries_Status();
 void Manager_Edit_Employee(string employee_id);
 void Manager_Statistics();
 void Manager_Get_Employees_Details();
-void Add_New_Employee();
 //employer
 void Employer_Menu(string employer_id);
 bool Employer_Check_Availability(string employee_id, string date, string proffesion, int hourly_wage);
@@ -565,6 +566,296 @@ bool Available_Date(string employee_id, string date)
 	return true;
 }
 
+void Add_New_Employee() //function for add a new employee to the database company
+{
+	//personal info manager must provide for adding a new employee
+	string address;
+	string email;
+	string emergencyContactName;
+	string emergencyContactPhone;
+	int hourlyWage;
+	string firstName;
+	string lastName;
+	string id;
+	string resetPasswordDetails[3];
+	string type = "employee";
+	string phone;
+	string profession;
+	//------------------------------------------------------------
+
+	cout << "ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
+	cout << "Profession - ";
+	cin >> profession;
+	cout << "First Name - ";
+	cin >> firstName;
+	cout << "Last Name - ";
+	cin >> lastName;
+	cout << "ID - ";
+	cin >> id;
+	cout << "Email - ";
+	cin >> email;
+	cout << "Address - ";
+	cin >> address;
+	cout << "Phone - ";
+	cin >> phone;
+	cout << "Hourly Wage - ";
+	cin >> hourlyWage;
+	cout << "Emergency contact:" << endl;
+	cout << "Name - ";
+	cin >> emergencyContactName;
+	cout << "Phone - ";
+	cin >> emergencyContactPhone;
+	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
+	cout << "1.What is your mother`s name?" << endl;
+	cin >> resetPasswordDetails[0];
+	cout << "2.What is your date of birth?(format:XX.XX.XXXX)" << endl;
+	cin >> resetPasswordDetails[1];
+	cout << "3.What's your main hobby?" << endl;
+	cin >> resetPasswordDetails[2];
+	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
+	//end of asking for personal info from the manager
+
+	//identification details the system must provide a new employee
+	string password = GenRandomChars(8);
+	string userName = firstName + GenRandomChars(2);
+	//-------------------------------------------------------------
+
+
+	std::ofstream os("./temp.json",  //Creates a temp json file to hold the new object(employee) we want to create
+		std::ios_base::out | std::ios_base::trunc);
+	assert(os);
+
+	compact_json_stream_encoder encoder(os); // no indent
+
+
+	//start of building the json object(the new employee)
+	encoder.begin_object();
+	encoder.key("address");
+	encoder.string_value(address);
+	encoder.key("amount of rating");
+	encoder.int64_value(0);
+	encoder.key("day working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("email");
+	encoder.string_value(email);
+	encoder.key("emergency contact name");
+	encoder.string_value(emergencyContactName);
+	encoder.key("emergency contact phone");
+	encoder.string_value(emergencyContactPhone);
+	encoder.key("end hour working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("end minute working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("first name");
+	encoder.string_value(firstName);
+	encoder.key("hourly wage");
+	encoder.int64_value(hourlyWage);
+	encoder.key("id");
+	encoder.string_value(id);
+	encoder.key("inquiries body");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("inquiries status");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("inquiries subject");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("last name");
+	encoder.string_value(lastName);
+	encoder.key("month working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("number of rating");
+	encoder.int64_value(0);
+	encoder.key("password");
+	encoder.string_value(password);
+	encoder.key("phone");
+	encoder.string_value(phone);
+	encoder.key("previous month for salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("previous salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("previous year for salary");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("profession");
+	encoder.string_value(profession);
+	encoder.key("reset password details");
+	encoder.begin_array();
+	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
+		encoder.string_value(resetPasswordDetails[i]);
+	}
+	encoder.end_array();
+	encoder.key("shift flag");
+	encoder.bool_value(false);
+	encoder.key("start hour working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("start minute working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("type");
+	encoder.string_value(type);
+	encoder.key("unavailability");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("user name");
+	encoder.string_value(userName);
+	encoder.key("working hours");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("year working");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.end_object();
+	encoder.flush();
+	os.close();
+
+
+	string path = "./temp.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+	}
+	json jsontemp = json::parse(is);
+
+	json alldata = read_file();
+	alldata.push_back(jsontemp);
+	//cout << pretty_print(alldata);
+	path = "./database.json";
+	write_to_file(alldata, path);
+
+	cout << "NEW EMPLOYEE WAS SUCCESSFULY ADDED,thank you,Manager!" << endl;
+	cout << "Employee Username is: " << userName;
+	cout << "Employee Password is: " << password;
+	cout << "Please keep your identification details in secret." << endl;
+	cout << "You can log in to the system now" << endl;
+}
+
+
+void Add_New_Employer() //function for add a new employer to the database company
+{
+	//personal info user must provide for creating a new employer 
+	string address;
+	string email;
+	string firstName;
+	string lastName;
+	string id;
+	string resetPasswordDetails[3];
+	string type = "employer";
+	string phone;
+	string creditcard;
+	//------------------------------------------------------------
+
+	cout << "SIGN UP-CREATE NEW EMPLOYER" << endl << "=================" << endl << endl;
+	cout << "First Name - ";
+	cin >> firstName;
+	cout << "Last Name - ";
+	cin >> lastName;
+	cout << "ID - ";
+	cin >> id;
+	cout << "Email - ";
+	cin >> email;
+	cout << "Address - ";
+	cin >> address;
+	cout << "Phone - ";
+	cin >> phone;
+	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
+	cout << "1.What is your mother`s name?" << endl;
+	cin >> resetPasswordDetails[0];
+	cout << "2.What is your date of birth?(format:XX.XX.XXXX)" << endl;
+	cin >> resetPasswordDetails[1];
+	cout << "3.What's your main hobby?" << endl;
+	cin >> resetPasswordDetails[2];
+	cout << "Enter your credit card number for charge" << endl;
+	cin >> creditcard;
+	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
+	//end of asking for personal info 
+
+	//identification details the system must provide a new employer
+	string password = GenRandomChars(8);
+	string userName = firstName + GenRandomChars(2);
+	//-------------------------------------------------------------
+
+
+	std::ofstream os("./temp.json",  //Creates a temp json file to hold the new object(employer) we want to create
+		std::ios_base::out | std::ios_base::trunc);
+	assert(os);
+
+	compact_json_stream_encoder encoder(os); // no indent
+
+
+	//start of building the json object(the new employer)
+	encoder.begin_object();
+	encoder.key("address");
+	encoder.string_value(address);
+	encoder.key("credit card number");
+	encoder.string_value(creditcard);
+	encoder.key("email");
+	encoder.string_value(email);
+	encoder.key("first name");
+	encoder.string_value(firstName);
+	encoder.key("hierd id");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("hierd proffesion");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("hiring date");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("hiring rate");
+	encoder.begin_array();
+	encoder.end_array();
+	encoder.key("id");
+	encoder.string_value(id);
+	encoder.key("last name");
+	encoder.string_value(lastName);
+	encoder.key("password");
+	encoder.string_value(password);
+	encoder.key("phone");
+	encoder.string_value(phone);
+	encoder.key("reset password details");
+	encoder.begin_array();
+	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
+		encoder.string_value(resetPasswordDetails[i]);
+	}
+	encoder.end_array();
+	encoder.key("type");
+	encoder.string_value(type);
+	encoder.key("user name");
+	encoder.string_value(userName);
+	encoder.end_object();
+	encoder.flush();
+	os.close();
+
+	string path = "./temp.json";
+	fstream is(path);
+	if (!is)
+	{
+		cout << "Cannot open " << path << endl;
+	}
+	json jsontemp = json::parse(is);
+
+	json alldata = read_file();
+	alldata.push_back(jsontemp);
+	//cout << pretty_print(alldata);
+	path = "./database.json";
+	write_to_file(alldata, path);
+
+	cout << "NEW EMPLOYER WAS SUCCESSFULY CREATED!" << endl;
+	cout << "Your Username is: " << userName;
+	cout << "Your Password is: " << password;
+	cout << "Please keep your identification details in secret." << endl;
+	cout << "You can log in to the system now" << endl;
+}
 //employee functions**************************************************************************************************
 void Employee_Menu(string employee_id) {
 
@@ -1261,174 +1552,6 @@ void Manager_Menu(string manager_id)
 	} while (choice != 7);
 }
 
-void Add_New_Employee()
-{
-	//personal info manager must provide for adding a new employee
-	string address;
-	string email;
-	string emergencyContactName;
-	string emergencyContactPhone;
-	int hourlyWage;
-	string firstName;
-	string lastName;
-	string id;
-	string resetPasswordDetails[3];
-	string type = "employee";
-	string phone;
-	string profession;
-	//------------------------------------------------------------
-
-	cout << "ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
-	cout << "Profession - ";
-	cin >> profession;
-	cout << "First Name - ";
-	cin >> firstName;
-	cout << "Last Name - ";
-	cin >> lastName;
-	cout << "ID - ";
-	cin >> id;
-	cout << "Email - ";
-	cin >> email;
-	cout << "Address - ";
-	cin >> address;
-	cout << "Phone - ";
-	cin >> phone;
-	cout << "Hourly Wage - ";
-	cin >> hourlyWage;
-	cout << "Emergency contact:" << endl;
-	cout << "Name - ";
-	cin >> emergencyContactName;
-	cout << "Phone - ";
-	cin >> emergencyContactPhone;
-	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
-	cout << "1.What is your mother`s name?" << endl;
-	cin >> resetPasswordDetails[0];
-	cout << "2.What is your date of birth?(format:XX.XX.XXXX)" << endl;
-	cin >> resetPasswordDetails[1];
-	cout << "3.What's your main hobby?" << endl;
-	cin >> resetPasswordDetails[2];
-	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
-	//end of asking for personal info from the manager
-
-	//identification details the system must provide a new employee
-	string password = GenRandomChars(8);
-	string userName = firstName + GenRandomChars(2);
-	//-------------------------------------------------------------
-
-
-	std::ofstream os("./temp.json",  //Creates a temp json file to hold the new object(employee) we want to create
-		std::ios_base::out | std::ios_base::trunc);
-	assert(os);
-
-	compact_json_stream_encoder encoder(os); // no indent
-
-
-	//start of building the json object(the new employee)
-	encoder.begin_object();
-	encoder.key("address");
-	encoder.string_value(address);
-	encoder.key("amount of rating");
-	encoder.int64_value(0);
-	encoder.key("day working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("email");
-	encoder.string_value(email);
-	encoder.key("emergency contact name");
-	encoder.string_value(emergencyContactName);
-	encoder.key("emergency contact phone");
-	encoder.string_value(emergencyContactPhone);
-	encoder.key("end hour working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("end minute working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("first name");
-	encoder.string_value(firstName);
-	encoder.key("hourly wage");
-	encoder.int64_value(hourlyWage);
-	encoder.key("id");
-	encoder.string_value(id);
-	encoder.key("inquiries body");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("inquiries status");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("inquiries subject");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("last name");
-	encoder.string_value(lastName);
-	encoder.key("month working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("number of rating");
-	encoder.int64_value(0);
-	encoder.key("password");
-	encoder.string_value(password);
-	encoder.key("phone");
-	encoder.string_value(phone);
-	encoder.key("previous month for salary");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("previous salary");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("previous year for salary");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("profession");
-	encoder.string_value(profession);
-	encoder.key("reset password details");
-	encoder.begin_array();
-	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
-		encoder.string_value(resetPasswordDetails[i]);
-	}
-	encoder.end_array();
-	encoder.key("shift flag");
-	encoder.bool_value(false);
-	encoder.key("start hour working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("start minute working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("type");
-	encoder.string_value(type);
-	encoder.key("unavailability");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("user name");
-	encoder.string_value(userName);
-	encoder.key("working hours");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("year working");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.end_object();
-	encoder.flush();
-	os.close();
-
-
-	string path = "./temp.json";
-	fstream is(path);
-	if (!is)
-	{
-		cout << "Cannot open " << path << endl;
-	}
-	json jsontemp = json::parse(is);
-
-	json alldata = read_file();
-	alldata.push_back(jsontemp);
-	//cout << pretty_print(alldata);
-	path = "./database.json";
-	write_to_file(alldata, path);
-
-	cout << "NEW EMPLOYEE WAS SUCCESSFULY ADDED,thank you,Manager!" << endl;
-}
 
 void Manager_Guide()
 {
