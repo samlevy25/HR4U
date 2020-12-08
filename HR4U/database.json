@@ -168,12 +168,12 @@
     {
         "address": "hadera", 
         "amount of rating": 4, 
-        "day working": [], 
+        "day working": [9, 10, 11], 
         "email": "yamit1221@gmail.com", 
         "emergency contact name": "lior", 
         "emergency contact phone": "0535455987", 
-        "end hour working": [], 
-        "end minute working": [], 
+        "end hour working": [7, 13, 7], 
+        "end minute working": [35, 10, 35], 
         "first name": "yamit", 
         "hourly wage": 30, 
         "id": "23546973", 
@@ -181,7 +181,7 @@
         "inquiries status": [], 
         "inquiries subject": [], 
         "last name": "bat galim", 
-        "month working": [], 
+        "month working": [12, 12, 12], 
         "number of rating": 1, 
         "password": "667ttr21", 
         "phone": "0526443396", 
@@ -191,12 +191,12 @@
         "profession": "carpenter", 
         "reset password details": ["Liz", "18.10.1995", "cook"], 
         "shift flag": true, 
-        "start hour working": [], 
-        "start minute working": [], 
+        "start hour working": [0, 7, 0], 
+        "start minute working": [56, 40, 56], 
         "type": "employee", 
         "unavailability": ["20.01.2020"], 
-        "user name": "yamit85", 
-        "working hours": [], 
-        "year working": []
+        "user name": "yamit85",
+      "working hours": [ 6.650000095367432, 5.5, 6.650000095367432 ], 
+        "year working": [2020, 2020, 2020]
     }
 ]

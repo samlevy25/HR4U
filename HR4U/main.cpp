@@ -1227,7 +1227,7 @@ void Employee_Shift(string employee_id)
 						end_minute = tPtr->tm_min;
 						data["end hour working"].push_back(end_hour);
 						data["end minute working"].push_back(end_minute);
-						int total_hours, total_minute;
+						float total_hours, total_minute;
 						float total_time;
 						int Start_hour_length = data["start hour working"].size();
 						total_minute = data["end minute working"][Start_hour_length - 1].as_double() - data["start minute working"][Start_hour_length - 1].as_double();
