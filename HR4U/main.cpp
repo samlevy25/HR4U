@@ -675,7 +675,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	encoder.string_value(password);
 	encoder.key("phone");
 	encoder.string_value(phone);
-	encoder.key("previous month for salary");
+	/*encoder.key("previous month for salary");    we dont use this keys please delete
 	encoder.begin_array();
 	encoder.end_array();
 	encoder.key("previous salary");
@@ -683,7 +683,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	encoder.end_array();
 	encoder.key("previous year for salary");
 	encoder.begin_array();
-	encoder.end_array();
+	encoder.end_array();*/
 	encoder.key("profession");
 	encoder.string_value(profession);
 	encoder.key("reset password details");
@@ -1036,9 +1036,8 @@ void Employee_Add_Inquiries(string employee_id)
 					cout << "please choose your inquiry subject" << endl;
 					cout << "1.Vacation/Holiday" << endl;
 					cout << "2.Sick leave" << endl;
-					cout << "3.Salary issue" << endl;
-					cout << "4.Attendence clock issue" << endl;
-					cout << "5.Other" << endl;
+					cout << "3.Attendence clock issue" << endl;
+					cout << "4.Other" << endl;
 					cin >> sub_choice;
 
 					switch (sub_choice) {
@@ -1051,14 +1050,10 @@ void Employee_Add_Inquiries(string employee_id)
 						cout << "Subject:" << subject << endl;
 						break;
 					case 3:
-						subject = "salary issue";
-						cout << "Subject:" << subject << endl;
-						break;
-					case 4:
 						subject = "attendence clock issue";
 						cout << "Subject:" << subject << endl;
 						break;
-					case 5:
+					case 4:
 						subject = "other";
 						cout << "Subject:" << subject << endl;
 						break;
@@ -1301,7 +1296,18 @@ void Employee_Salary_History(string employee_id)
 				cout << "Enter month (1-12) and year to watch previous salary" << endl;
 				cin >> month >> year;
 			} while (month > 12 || month < 0);
-			int montt_year_length = data["previous month for salary"].size();
+			int month_size = data["month working"].size();
+			double salary = 0;
+			for (size_t j = 0;  j < month_size;  j++)
+			{
+				
+				if (month==data["month working"][j] && year == data["year working"][j])
+				{
+					flag_help = true;
+					salary += data["working hours"][j].as_double() * data["hourly wage"].as_double();
+				}
+			}
+			/*int montt_year_length = data["previous month for salary"].size();
 			for (size_t j = 0; j < montt_year_length; j++)
 			{
 				if (data["previous month for salary"][j] == month & data["previous year for salary"][j] == year)
@@ -1309,10 +1315,14 @@ void Employee_Salary_History(string employee_id)
 					flag_help = true;
 					cout << "Salary for month: " << month << " year: " << year << " is: " << data["previous salary"][j] << "$" << endl;
 				}
-			}
+			}*/
 			if (!flag_help)
 			{
 				cout << "There is no salary information for this month and year" << endl;
+			}
+			else
+			{
+				cout << "Salary for month: " << month << ", year: " << year << " is : " << salary << " NIS" << endl;
 			}
 		}
 	}
@@ -1639,12 +1649,6 @@ void Manage_Requests(string subject, json& data) {
 			data["unavailability"].push_back(date); //puts it in the unavailability dates of the employee to work
 			num--;
 		}
-	}
-	else if (subject == "\"Salary issue\"") {
-		//float award;
-		//cout << "According to the approval,enter how much(in $) you want to award the employee:" << endl;
-		//cin >> award;
-		//NEED TO FINISH, WAITING FOR MATAN`S function
 	}
 	else if (subject == "\"Attendence clock issue\"") {
 		cout << "According to the approval, please enter how many hours do you approve:" << endl;
