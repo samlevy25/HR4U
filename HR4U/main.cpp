@@ -394,8 +394,7 @@ void Login()
 
 			break;
 		case 3:
-
-			//add new employer
+			Add_New_Employer();
 			break;
 		case 4:
 			cout << "Thank you for using HR4U!" << endl << "bye bye" << endl;
