@@ -775,7 +775,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	cin >> resetPasswordDetails[2];
 	cout << "Enter your credit card number for charge" << endl;
 	cin >> creditcard;
-	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
+	cout << "Thank you for providing personal details.Just a moment..." << endl;
 	//end of asking for personal info 
 
 	//identification details the system must provide a new employer
