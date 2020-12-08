@@ -2309,11 +2309,13 @@ void Employer_Search(string employer_id)
 			json& data = alldata[i];
 			if (data["type"] == "employee")
 			{
-
+				string id_employee = data["id"].as_string();
+				float rating = Employee_Rate(id_employee);
 				if (Employer_Check_Availability(data["id"].as_string(), date, proffesion, hourly_wage))
 				{
 					counter++;
-					cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() << "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
+					cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() <<"   Rate: "<<rating<< "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
+
 				}
 
 			}
