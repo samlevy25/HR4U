@@ -531,9 +531,7 @@ void Edit_Account(string user_id)
 				}
 			} while (choice != 5);
 		}
-		break;
 	}
-
 }
 
 bool Available_Date(string employee_id, string date)
@@ -893,10 +891,9 @@ void Employee_Menu(string employee_id) {
 			Employee_Guide();
 			break;
 		case 7:
+			cout << "bye bye" << endl;
 			break;
 		default:
-			cout << "Invalid value. Please try again. Enter your choice: 1-7." << endl;
-			cin >> choice;
 			break;
 		}
 	} while (choice != 7);
@@ -1087,10 +1084,16 @@ void Employee_Employment_History(string employee_id)
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
-			int length_of_work = data["working hours"].size();
-			for (size_t j = 0; j < length_of_work; j++)
+			if (data["working hours"].size() == 0)
 			{
-				cout << j + 1 << "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl;;
+				cout << "No working hours have been found yet. START WORKING!" << endl;
+				break;
+			}
+			else {
+				for (size_t j = 0; j < data["working hours"].size(); j++)
+				{
+					cout << j + 1 << "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl;;
+				}
 			}
 		}
 	}
