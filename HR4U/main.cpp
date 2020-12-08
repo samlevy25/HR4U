@@ -8,6 +8,7 @@
 #include <jsoncons_ext/jmespath/jmespath.hpp>
 #include <jsoncons_ext/jsonpath/jsonpath.hpp>
 #include <jsoncons_ext/jsonpointer/jsonpointer.hpp>
+#include <jsoncons/basic_json.hpp>
 #include <ctime>
 #include <stdexcept>
 #include <string>
@@ -41,6 +42,7 @@ bool check_email(string email);
 void Edit_Account(string user_id);
 void Add_New_Employee();
 void Add_New_Employer();
+void Remove_Employee();
 //employee
 void Employee_Guide();
 void Employee_Shift(string employee_id);
@@ -578,6 +580,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	string type = "employee";
 	string phone;
 	string profession;
+	const int reset_details_length = 3;
 	//------------------------------------------------------------
 
 	cout << "ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
@@ -595,7 +598,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	cin >> address;
 	cout << "Phone - ";
 	cin >> phone;
-	cout << "Hourly Wage - ";
+	cout << "Hourly Wage - (enter integer number)";
 	cin >> hourlyWage;
 	cout << "Emergency contact:" << endl;
 	cout << "Name - ";
@@ -685,7 +688,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	encoder.string_value(profession);
 	encoder.key("reset password details");
 	encoder.begin_array();
-	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
+	for (int i = 0; i < reset_details_length; ++i) { //for the length of the reset password details array
 		encoder.string_value(resetPasswordDetails[i]);
 	}
 	encoder.end_array();
@@ -749,6 +752,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	string type = "employer";
 	string phone;
 	string creditcard;
+	const int reset_details_length = 3;
 	//------------------------------------------------------------
 
 	cout << "SIGN UP-CREATE NEW EMPLOYER" << endl << "=================" << endl << endl;
@@ -821,7 +825,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	encoder.string_value(phone);
 	encoder.key("reset password details");
 	encoder.begin_array();
-	for (int i = 0; i < 3; ++i) { //for the length of the reset password details array
+	for (int i = 0; i < reset_details_length; ++i) { //for the length of the reset password details array
 		encoder.string_value(resetPasswordDetails[i]);
 	}
 	encoder.end_array();
@@ -853,6 +857,28 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	cout << "Please keep your identification details in secret." << endl;
 	cout << "You can log in to the system now" << endl;
 }
+
+void Remove_Employee() { // delete employee function , from the database company
+	string employee_id;
+	cout << "Please enter the employee id you would like to remove:" << endl;
+	cin >> employee_id;
+	json alldata = read_file();
+	bool flag = false;
+	for (std::size_t i = 0; i < alldata.size(); ++i)
+	{
+		json& data = alldata[i];
+		if (data["id"] == employee_id)
+		{
+			flag = true;
+			alldata.erase(alldata.find(employee_id));
+		}
+		if (flag == true)
+			break;
+	}
+	string path = "./database.json";
+	write_to_file(alldata, path);
+}
+
 //employee functions**************************************************************************************************
 void Employee_Menu(string employee_id) {
 
@@ -1017,23 +1043,23 @@ void Employee_Add_Inquiries(string employee_id)
 
 					switch (sub_choice) {
 					case 1:
-						subject = "Vacation/Holiday";
+						subject = "vacation/holiday";
 						cout << "Subject:" << subject << endl;
 						break;
 					case 2:
-						subject = "Sick leave";
+						subject = "sick leave";
 						cout << "Subject:" << subject << endl;
 						break;
 					case 3:
-						subject = "Salary issue";
+						subject = "salary issue";
 						cout << "Subject:" << subject << endl;
 						break;
 					case 4:
-						subject = "Attendence clock issue";
+						subject = "attendence clock issue";
 						cout << "Subject:" << subject << endl;
 						break;
 					case 5:
-						subject = "Other";
+						subject = "other";
 						cout << "Subject:" << subject << endl;
 						break;
 					}
@@ -1536,6 +1562,7 @@ void Manager_Menu(string manager_id)
 					break;
 				case 2:
 					//remove employee
+					Remove_Employee();
 					break;
 				}
 			}

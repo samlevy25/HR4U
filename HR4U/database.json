@@ -107,7 +107,7 @@
         "first name": "bar", 
         "hourly wage": 50, 
         "id": "206902355", 
-        "inquiries body": ["ve checked my salary and found out 2000ils are missed", " would like to take a vacation on the 23-25.12", 
+        "inquiries body": ["i have checked my salary and found out 2000ils are missed", " would like to take a vacation on the 23-25.12", 
             "m very sick i cant work today"
         ], 
         "inquiries status": ["approved", "disapproved", "in process"], 
