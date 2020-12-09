@@ -1165,7 +1165,7 @@ void Employee_Employment_History(string employee_id)
 			else {
 				for (size_t j = 0; j < data["working hours"].size(); j++)
 				{
-					cout << j + 1 << "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl<<endl;
+					cout << j + 1 << "  Date: " << data["day working"][j] << "." << data["month working"][j] << "." << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl<<endl;
 				}
 			}
 		}
@@ -2349,7 +2349,7 @@ void Employer_Menu(string employer_id)
 		cout << "2. Rate employee" << endl;
 		cout << "3. Watch hiring history" << endl;
 		cout << "4. Edit account" << endl;
-		cout << " 5.User guide" << endl;
+		cout << "5.User guide" << endl;
 		cout << "6. Exit system(back to login screen)" << endl;
 		cout << "----------" << endl << endl;
 		cin >> choice;
