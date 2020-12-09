@@ -743,16 +743,16 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	}
 	json jsontemp = json::parse(is);
 
-	json alldata = read_file();
-	alldata.push_back(jsontemp);
-	//cout << pretty_print(alldata);
+	json alldata = read_file();  //reads database file
+	alldata.push_back(jsontemp); //adds the new employer to the database
 	path = "./database.json";
-	write_to_file(alldata, path);
+	write_to_file(alldata, path); //rewrites the data base
+
 	cout << GREEN;
 	cout << "NEW EMPLOYEE WAS SUCCESSFULY ADDED,thank you,Manager!" << endl;
 	cout << CYAN;
-	cout << "Employee Username is: " << userName;
-	cout << "Employee Password is: " << password;
+	cout << "Employee Username is: " << userName << endl;
+	cout << "Employee Password is: " << password << endl;
 	cout << WHITE;
 	cout << "Please keep your identification details in secret." << endl;
 	cout << "You can log in to the system now" << endl;
@@ -859,7 +859,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	encoder.flush();
 	os.close();
 
-	string path = "./temp.json";
+	string path = "./temp.json"; //reads temp file(the new employer)
 	fstream is(path);
 	if (!is)
 	{
@@ -867,16 +867,15 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	}
 	json jsontemp = json::parse(is);
 
-	json alldata = read_file();
-	alldata.push_back(jsontemp);
-	//cout << pretty_print(alldata);
+	json alldata = read_file();  //reads database file
+	alldata.push_back(jsontemp); //adds the new employer to the database
 	path = "./database.json";
-	write_to_file(alldata, path);
+	write_to_file(alldata, path); //rewrites the data base
 	cout << GREEN;
 	cout << "NEW EMPLOYER WAS SUCCESSFULY CREATED!" << endl;
 	cout << CYAN;
-	cout << "Your Username is: " << userName;
-	cout << "Your Password is: " << password;
+	cout << "Your Username is: " << userName << endl;
+	cout << "Your Password is: " << password << endl;
 	cout << WHITE;
 	cout << "Please keep your identification details in secret." << endl;
 	cout << "You can log in to the system now" << endl;
@@ -887,22 +886,36 @@ void Remove_Employee() { // delete employee function , from the database company
 	string employee_id;
 	cout << "Please enter the employee id you would like to remove:" << endl;
 	cin >> employee_id;
-	json alldata = read_file();
-	bool flag = false;
-	for (std::size_t i = 0; i < alldata.size(); ++i)
+
+	std::ifstream is("./database.json"); //opens file
+	ojson instance = ojson::parse(is); //creates instance of the database
+
+	bool found = false;
+	for (std::size_t i = 0; i < instance.size(); ++i)
 	{
-		json& data = alldata[i];
+		ojson& data = instance[i];
 		if (data["id"] == employee_id)
 		{
-			flag = true;
-			alldata.erase(alldata.find(employee_id));
-		}
-		if (flag == true)
+			found = true;
+			employee_id += "')]"; //employee_id we want to remove
+			string objects_to_save = "$.*[?(@.id != '";
+			objects_to_save += employee_id; //We would like to save all the objects that thier id !=  employee_id we want to remove
+
+			// Select all objects that have id not equal to the employee id and return in an array 
+			auto result = jsonpath::json_query(instance, objects_to_save); //objects_to_save= "$.*[?(@.id != 'some_employee_id')]";
+
+			std::ofstream os("./database.json"); //re-writes the file in the same 
+			result.dump_pretty(os);
+			cout << "Employee successfuly removed." << endl;
 			break;
+		}
 	}
-	string path = "./database.json";
-	write_to_file(alldata, path);
+
+	if(!found) {
+		cout << "No employee in the given id has been found." << endl;
+	}
 }
+
 
 //employee functions**************************************************************************************************
 void Employee_Menu(string employee_id) {
@@ -1771,14 +1784,14 @@ void Manage_Inquiries_Status() {
 	cout << "-----------------------" << endl;
 	cout << "Enter the id you want to edit:" << endl;
 	cin >> employee_id;
-	bool flag = false; //if the employee has been found/not
+	bool found = false; //if the employee has been found/not
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
 
 		if (data["id"] == employee_id)
 		{
-			flag = true;
+			found = true;
 			int inquiries_length = data["inquiries status"].size(); //inquiries array length
 			if (inquiries_length == 0)
 			{
@@ -1829,7 +1842,7 @@ void Manage_Inquiries_Status() {
 			}
 		}
 	}
-	if (!flag)
+	if (!found)
 		cout << "employee not found in this id." << endl<<endl;
 }
 
@@ -2807,6 +2820,7 @@ void Employer_Employment_History(string employer_id)
 //main
 int main()
 {
+	Remove_Employee();
 	Logo();
 	Login();
 	return 0;
