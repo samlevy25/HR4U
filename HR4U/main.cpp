@@ -2678,7 +2678,7 @@ void Employer_rate_employee(string employer_id)
 					if (rating == 0)//not ranked this employee yet
 					{
 						employee_id = data["hierd id"][choice].as_string();
-						cout << "You choose to rank " << Get_employee_name(employee_id) << ". The date you hired " << Get_employee_name(employee_id) << " is: " << data["hiring date"] << endl << endl;
+						cout << "You choose to rank " << Get_employee_name(employee_id) << endl << endl;
 						cout << "What is your level of satisfaction with the service? " << endl;
 						cout << "The rating is between 1 and 5 stars" << endl << "1 - Not satisfied at all" << endl << "5 - Very satisfied " << endl;
 						cin >> rate;
