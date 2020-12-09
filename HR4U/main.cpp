@@ -1,7 +1,13 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#define WHITE "\033[0m"    //color reset to white
+#define WHITE "\033[0m" 
 #define BLOCKCOLOR "\033[1;100;30m" //block of color
+#define PINK "\033[35m"
+#define BLUE "\033[34m"
+#define GREEN "\033[32m" 
+#define RED   "\033[31m"
+#define YELLOW "\033[33m"
+#define CYAN "\033[36m"
 #include <stdlib.h>
 #include <iostream>
 #include <json.hpp>
@@ -110,7 +116,7 @@ N:
 //*******************************************************************************************************************
 void Logo()
 {
-	system("color 9");
+	cout << BLUE;
 	cout << endl;
 	cout << "                           #     #       # # # #         #       #       #       # " << endl;
 	cout << "                           #     #       #      #        #       #       #       # " << endl;
@@ -120,6 +126,7 @@ void Logo()
 	cout << "                           #     #       #      #                #       #       # " << endl;
 	cout << "                           #     #       #       #               #        # # # #  " << endl;
 	cout << endl;
+	system("color 9");
 }
 //*******************************************************************************************************************
 void changeColor(int desiredColor)
@@ -239,15 +246,16 @@ void Login()
 	string security_ans[3];
 	bool all_answer_right = true;
 	bool flag;
-
 	do
 	{
-		cout << endl;
+		cout << WHITE;
+		cout << endl<<"----------" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Login with username and password" << endl;
 		cout << "2.Forgot user name/password?" << endl;
 		cout << "3.New here? register  as employer" << endl;
 		cout << "4.exit" << endl;
+		cout << "----------" <<endl<<endl;
 		cin >> choice;
 
 
@@ -256,6 +264,7 @@ void Login()
 		case 1:
 			do
 			{
+				cout << YELLOW;
 				flag = false;
 				cout << "Enter user name: " << endl;
 				cin >> user_name;
@@ -270,7 +279,7 @@ void Login()
 						{
 							if (data["password"] == password)
 							{
-								system("color 2");
+								cout << GREEN;
 								string user_id = data["id"].as_string();
 								if (data["type"] == "employee")
 								{
@@ -299,12 +308,11 @@ void Login()
 							}
 							else
 							{
-								system("color 4");
+								cout << RED;
 								cout << "Incorrect  password" << endl;
 								cout << "1.try again" << endl;
 								cout << "2.back" << endl;
 								cin >> choice1;
-								system("color 9");
 								if (choice1 != 1 && choice1 != 2)
 								{
 									do
@@ -323,12 +331,11 @@ void Login()
 				}
 				if (flag == false)
 				{
-					system("color 4");
+					cout << RED;
 					cout << endl << "Incorrect user name" << endl;
 					cout << "1.try again" << endl;
-					cout << "2.back" << endl;
+					cout << "2.back" << endl<<endl;
 					cin >> choice1;
-					system("color 9");
 					if (choice1 != 1 && choice1 != 2)
 					{
 						do
@@ -341,7 +348,8 @@ void Login()
 			} while (choice1 == 1);
 			break;
 		case 2:
-			cout << "Please answer to your security questions " << endl;
+			cout << YELLOW;
+			cout <<endl<< "Please answer to your security questions " << endl;
 			cout << "1.What is your mother`s name?" << endl;
 			cin >> security_ans[0];
 			cout << "2.What is your date of birth?(format:XX.XX.XXXX)" << endl;
@@ -360,11 +368,14 @@ void Login()
 				}
 				if (all_answer_right)
 				{
+					cout << GREEN;
 					string new_user_name = data["first name"].as_string() + GenRandomChars(2);
 					string new_password = GenRandomChars(8);
 					cout << endl << "You answered all the questions correctly" << endl << "your new username and password: " << endl << endl;
+					cout << CYAN;
 					cout << "user name: " << new_user_name << endl;
 					cout << "password: " << new_password << endl;
+					cout << WHITE;
 					std::error_code ec;
 					jsonpointer::replace(data, "/user name", json(new_user_name), ec);
 					if (ec)
@@ -388,6 +399,7 @@ void Login()
 				}
 				else
 				{
+					cout << RED;
 					cout << "You answered one of the questions incorrectly" << endl << "You are returned to the login screen " << endl;
 				}
 				break;
@@ -428,12 +440,14 @@ void Edit_Account(string user_id)
 		{
 			int choice;
 			do {
+				cout << endl<<"----------" << endl;
 				cout << "Edit Account By Employee:Choose what details would you like to edit:" << endl;
 				cout << "1.Edit Adress" << endl;
 				cout << "2.Edit Email" << endl;
 				cout << "3.Edit Phone number" << endl;
 				cout << "4.Edit Emergency contact" << endl;
 				cout << "5.Back" << endl;
+				cout << "----------" << endl << endl;
 				cin >> choice;
 				switch (choice) {
 				case 1:
@@ -450,8 +464,10 @@ void Edit_Account(string user_id)
 					}
 					else
 					{
-						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						write_to_file(alldata, path); //updates the file(actually,re-writes it)!
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl<<endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -472,7 +488,9 @@ void Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl<<endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -494,7 +512,9 @@ void Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -520,7 +540,9 @@ void Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -528,7 +550,9 @@ void Edit_Account(string user_id)
 					cout << "Back to menu" << endl;
 					break;
 				default:
+					cout << RED;
 					cout << "Invalid value. Please try again. Enter your choice: 1-5." << endl;
+					cout << WHITE;
 					cin >> choice;
 				}
 			} while (choice != 5);
@@ -583,7 +607,9 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	const int reset_details_length = 3;
 	//------------------------------------------------------------
 
-	cout << "ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
+	
+	cout << endl << "----------" << endl;
+	cout <<"ADDING NEW EMPLOYEE" << endl << "=================" << endl << endl;
 	cout << "Profession - ";
 	cin >> profession;
 	cout << "First Name - ";
@@ -612,7 +638,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	cin >> resetPasswordDetails[1];
 	cout << "3.What's your main hobby?" << endl;
 	cin >> resetPasswordDetails[2];
-	cout << "Thank you for providing the employee personal details.Just a moment..." << endl;
+	cout << "Thank you for providing the employee personal details.Just a moment..." << endl<<endl;
 	//end of asking for personal info from the manager
 
 	//identification details the system must provide a new employee
@@ -675,15 +701,6 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	encoder.string_value(password);
 	encoder.key("phone");
 	encoder.string_value(phone);
-	/*encoder.key("previous month for salary");    we dont use this keys please delete
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("previous salary");
-	encoder.begin_array();
-	encoder.end_array();
-	encoder.key("previous year for salary");
-	encoder.begin_array();
-	encoder.end_array();*/
 	encoder.key("profession");
 	encoder.string_value(profession);
 	encoder.key("reset password details");
@@ -731,12 +748,16 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	//cout << pretty_print(alldata);
 	path = "./database.json";
 	write_to_file(alldata, path);
-
+	cout << GREEN;
 	cout << "NEW EMPLOYEE WAS SUCCESSFULY ADDED,thank you,Manager!" << endl;
+	cout << CYAN;
 	cout << "Employee Username is: " << userName;
 	cout << "Employee Password is: " << password;
+	cout << WHITE;
 	cout << "Please keep your identification details in secret." << endl;
 	cout << "You can log in to the system now" << endl;
+	cout << "--------------";
+	
 }
 
 
@@ -755,6 +776,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	const int reset_details_length = 3;
 	//------------------------------------------------------------
 
+	cout << endl << "----------" << endl;
 	cout << "SIGN UP-CREATE NEW EMPLOYER" << endl << "=================" << endl << endl;
 	cout << "First Name - ";
 	cin >> firstName;
@@ -777,7 +799,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	cin >> resetPasswordDetails[2];
 	cout << "Enter your credit card number for charge" << endl;
 	cin >> creditcard;
-	cout << "Thank you for providing personal details.Just a moment..." << endl;
+	cout << "Thank you for providing personal details.Just a moment..." << endl<<endl;
 	//end of asking for personal info 
 
 	//identification details the system must provide a new employer
@@ -850,12 +872,15 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	//cout << pretty_print(alldata);
 	path = "./database.json";
 	write_to_file(alldata, path);
-
+	cout << GREEN;
 	cout << "NEW EMPLOYER WAS SUCCESSFULY CREATED!" << endl;
+	cout << CYAN;
 	cout << "Your Username is: " << userName;
 	cout << "Your Password is: " << password;
+	cout << WHITE;
 	cout << "Please keep your identification details in secret." << endl;
 	cout << "You can log in to the system now" << endl;
+	cout << "-----------------" << endl;
 }
 
 void Remove_Employee() { // delete employee function , from the database company
@@ -887,6 +912,7 @@ void Employee_Menu(string employee_id) {
 
 	int choice;
 	do {
+		cout <<endl<< "----------" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Edit Account" << endl;
 		cout << "2.Salary" << endl;
@@ -895,8 +921,8 @@ void Employee_Menu(string employee_id) {
 		cout << "5.Exit/Enter shift" << endl;
 		cout << "6.User guide" << endl;
 		cout << "7.EXIT SYSTEM" << endl;
+		cout << "----------" << endl << endl;
 		cin >> choice;
-		system("color 9");
 		switch (choice) {
 		case 1:
 			Edit_Account(employee_id);
@@ -927,6 +953,7 @@ void Employee_Menu(string employee_id) {
 
 void Employee_Guide()
 {
+	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "First of all, the main menu: " << endl
 		<< "1.Edit Account  ->  Gives you the ability to edit your details (Address, Mail and more..)" << endl
@@ -940,18 +967,19 @@ void Employee_Guide()
 		<< "Now I belive you are ready to use the system" << endl
 		<< "Have a great day HR4U" << endl << endl;
 	cout << "-----------------------------------" << endl << endl;
-
+	cout << WHITE;
 }
 
 void Employee_Inquiries_Menu(string employee_id) {
 	int choice;
 	do {
-		cout << "****************************************************************" << endl;
+		cout << endl<<"****************************************************************" << endl;
 		cout << "Inquiries MENU! ADD/ALL" << endl;
 		cout << "Enter your choice:" << endl;
 		cout << "1.All Inquiries" << endl;
 		cout << "2.Add Inquiry" << endl;
 		cout << "3.Back" << endl;
+		cout << "---------------" << endl << endl;
 		cin >> choice;
 		switch (choice) {
 		case 1:
@@ -976,13 +1004,14 @@ void Employee_All_Inquiries(string employee_id) {//the inquires detail has been 
 		return;
 	}
 	json alldata = json::parse(is);
-
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
+			cout << CYAN;
 			cout << "ID:" << employee_id << endl;
+			cout << WHITE;
 			if (data["inquiries subject"].size() != 0)
 			{
 				for (int i = 0; i < data["inquiries subject"].size(); ++i)
@@ -996,11 +1025,14 @@ void Employee_All_Inquiries(string employee_id) {//the inquires detail has been 
 			}
 			else if (data["inquiries subject"].size() == 0)
 			{
+				cout << RED;
 				cout << "No inquiries have been found." << endl;
+				cout << WHITE;
 				cout << "-------------------------------------------------" << endl;
 			}
 		}
 	}
+	cout << WHITE;
 }
 
 void Employee_Add_Inquiries(string employee_id)
@@ -1021,11 +1053,12 @@ void Employee_Add_Inquiries(string employee_id)
 		{
 			int choice;
 			do {
-				cout << "****************************************************************" << endl;
+				cout << endl<<"****************************************************************" << endl;
 				cout << "Add inquiries:" << endl;
 				cout << "enter your choice:" << endl;
 				cout << "1.add new inquiry" << endl;
 				cout << "2.back" << endl;
+				cout << "---------------" << endl << endl;
 				cin >> choice;
 				switch (choice)
 				{
@@ -1073,15 +1106,19 @@ void Employee_Add_Inquiries(string employee_id)
 					data["inquiries subject"].push_back(subject);
 					data["inquiries body"].push_back(body);
 					data["inquiries status"].push_back(status);
+					cout << GREEN;
 					cout << "INQUIRY DETAILS SAVED, we`re working on it. thank you." << endl;
 					write_to_file(alldata, path);
+					cout << WHITE;
 				}
 					  break;
 				case 2:
 					cout << "thank you.back to inquiries menu" << endl;
 					break;
 				default:
+					cout << RED;
 					cout << "invalid input.please try again.please enter your choice 1-2 only:" << endl;
+					cout << WHITE;
 					break;
 				}
 			} while (choice != 2);
@@ -1100,6 +1137,7 @@ void Employee_Employment_History(string employee_id)
 		return;
 	}
 	json alldata = json::parse(is);
+	cout << YELLOW;
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
@@ -1107,17 +1145,20 @@ void Employee_Employment_History(string employee_id)
 		{
 			if (data["working hours"].size() == 0)
 			{
+				cout << RED;
 				cout << "No working hours have been found yet. START WORKING!" << endl;
 				break;
 			}
 			else {
 				for (size_t j = 0; j < data["working hours"].size(); j++)
 				{
-					cout << j + 1 << "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl;;
+					cout << j + 1 << "  Date: " << data["day working"][j] << "/" << data["month working"][j] << "/" << data["year working"][j] << "          " << "Total working hours: " << data["working hours"][j] << endl<<endl;
 				}
 			}
 		}
 	}
+	cout << "------------------------------" << endl << endl;;
+	cout << WHITE;
 }
 
 float Employee_Rate(string employee_id)
@@ -1139,9 +1180,17 @@ float Employee_Rate(string employee_id)
 		json& data = alldata[i];
 		if (data["id"] == employee_id)
 		{
-			amount = data["amount of rating"].as_double();
-			number_of_rating = data["number of rating"].as_double();
-			average_rating = (float)(amount / number_of_rating);
+			if (data["number of rating"].as_double() == 0)
+			{
+				return 0;
+			}
+			else
+			{
+				amount = data["amount of rating"].as_double();
+				number_of_rating = data["number of rating"].as_double();
+				average_rating = (float)(amount / number_of_rating);
+			}
+
 		}
 	}
 
@@ -1167,9 +1216,11 @@ void Employee_Shift(string employee_id)
 		{
 			do
 			{
+				cout << endl << "Enter your choice: " << endl;
 				cout << "1.Enter shift" << endl;
 				cout << "2.Exit shift" << endl;
 				cout << "3.Exit" << endl;
+				cout << "------------" << endl << endl;
 				cin >> choice;
 				switch (choice) {
 				case 1:
@@ -1187,12 +1238,15 @@ void Employee_Shift(string employee_id)
 						{
 							if (data["day working"][k] == day && data["month working"][k] == month && data["year working"][k] == year)
 							{
+								cout << RED;
 								cout << "You can enter shift once a day" << endl;
-								cout << "You are move to employee menu" << endl;
-								return Employee_Menu(employee_id);
+								cout << "You are move to employee menu" <<endl;
+								cout << "---------------" << endl << endl;
+								cout << WHITE;
+								return;
 							}
 						}
-						cout << "Date: " << day << "/" << month << "/" << year << " Start working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
+						cout << "Date: " << day << "/" << month << "/" << year << " Start working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl<<"Have a nice shift" <<endl<<endl;
 						start_hour = tPtr->tm_hour;
 						start_minute = tPtr->tm_min;
 						data["day working"].push_back(day);
@@ -1206,7 +1260,9 @@ void Employee_Shift(string employee_id)
 					}
 					else
 					{
-						cout << "You did not exit please do it now " << endl;
+						cout << RED;
+						cout << "You did not exit please do it now " << endl<<endl;
+						cout << WHITE;
 						break;
 					}
 				}
@@ -1220,7 +1276,7 @@ void Employee_Shift(string employee_id)
 						int day = tPtr->tm_mday;
 						int year = tPtr->tm_year + 1900;
 						int month = tPtr->tm_mon + 1;
-						cout << "Date: " << day << "/" << month << "/" << year << " End working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl;
+						cout << "Date: " << day << "/" << month << "/" << year << " End working: " << tPtr->tm_hour << ":" << tPtr->tm_min << ":" << tPtr->tm_sec << endl<<"THANK YOU"<<endl<<endl;
 						//we need to write to json file day month year and hour
 						//after that we need to calculate total working hour and write to file (TEnd->hour-TStart->hour)
 						end_hour = tPtr->tm_hour;
@@ -1245,9 +1301,11 @@ void Employee_Shift(string employee_id)
 						if (total_time > 10)
 						{
 							total_time = 0;
+							cout << RED;
 							cout << "Yod did not exit from work at time please add inquiries to managaer that change you the working hours \n(For this time working hours for this date is 0)" << endl;
 							data["working hours"].push_back(total_time);
 							write_to_file(alldata, path);
+							cout << WHITE;
 							break;
 						}
 						else
@@ -1259,13 +1317,17 @@ void Employee_Shift(string employee_id)
 					}
 					else
 					{
+						cout << RED;
 						cout << "You must enter shift before exit" << endl;
+						cout << WHITE;
 					}
 				}
 				case 3:
 					break;
 				default:
+					cout << RED;
 					cout << "Invalid value. Please try again. Enter your choice: 1-3." << endl;
+					cout << WHITE;
 					cin >> choice;
 					break;
 				}
@@ -1318,11 +1380,17 @@ void Employee_Salary_History(string employee_id)
 			}*/
 			if (!flag_help)
 			{
+				cout << RED;
 				cout << "There is no salary information for this month and year" << endl;
+				cout << WHITE;
+				cout << "------------" << endl << endl;;
 			}
 			else
 			{
+				cout << CYAN;
 				cout << "Salary for month: " << month << ", year: " << year << " is : " << salary << " NIS" << endl;
+				cout << WHITE;
+				cout << "------------" << endl << endl;;
 			}
 		}
 	}
@@ -1416,6 +1484,7 @@ void Manager_Menu(string manager_id)
 
 	int choice, select;
 	do {
+		cout << endl<<"----------" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Edit your Account" << endl;
 		cout << "2.View company statistics" << endl;
@@ -1424,8 +1493,8 @@ void Manager_Menu(string manager_id)
 		cout << "5.Add/Remove employee" << endl;
 		cout << "6.User guide" << endl;
 		cout << "7.EXIT SYSTEM" << endl;
+		cout << "----------" << endl << endl;
 		cin >> choice;
-		system("color 9");
 		switch (choice) {
 		case 1:
 			Edit_Account(manager_id);
@@ -1594,6 +1663,7 @@ void Manager_Menu(string manager_id)
 
 void Manager_Guide()
 {
+	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "The main menu: " << endl
 		<< "1.Edit your Account  ->  Gives you the ability to edit your details (Address, Mail and more..)" << endl
@@ -1604,6 +1674,7 @@ void Manager_Guide()
 		<< "Now I belive you are ready to use the system" << endl
 		<< "Have a great day HR4U" << endl;
 	cout << "-----------------------------------" << endl << endl;
+	cout <<WHITE;
 }
 
 void Manager_Get_Employees_Details()
@@ -1618,7 +1689,8 @@ void Manager_Get_Employees_Details()
 	json alldata = json::parse(is);
 
 	int counter = 0;
-	cout << "List of all the employees in the company: " << endl << endl;
+	cout << CYAN;
+	cout <<endl<< "List of all the employees in the company: " << endl << endl;
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 		json& data = alldata[i];
@@ -1634,12 +1706,13 @@ void Manager_Get_Employees_Details()
 		}
 	}
 	cout << "-----------------------------------------" << endl << endl;
+	cout << WHITE;
 }
 
 void Manage_Requests(string subject, json& data) {
 	if ((subject == "\"Vacation/Holiday\"") || (subject == "\"Sick leave\"")) {
 		int num;
-		cout << "According to the approval, please enter how many days do you approve:" << endl;
+		cout <<endl<< "According to the approval, please enter how many days do you approve:" << endl;
 		cin >> num;
 		cout << "Please enter all " << num << " dates the employee will be unavailable for work: (in format XX.XX.XXXX)" << endl;
 		while (num != 0) {
@@ -1695,6 +1768,7 @@ void Manage_Inquiries_Status() {
 		}
 	}
 	string employee_id;
+	cout << "-----------------------" << endl;
 	cout << "Enter the id you want to edit:" << endl;
 	cin >> employee_id;
 	bool flag = false; //if the employee has been found/not
@@ -1708,7 +1782,9 @@ void Manage_Inquiries_Status() {
 			int inquiries_length = data["inquiries status"].size(); //inquiries array length
 			if (inquiries_length == 0)
 			{
-				cout << "Manager,please PAY ATTENTION! this employee has no inquiries yet." << endl;
+				cout << RED;
+				cout << "Manager,please PAY ATTENTION! this employee has no inquiries yet." << endl << endl;;
+				cout << WHITE;
 				break; //means no inquiries have been found for this employee
 			}
 			else {
@@ -1737,12 +1813,16 @@ void Manage_Inquiries_Status() {
 					if (ans == "approved") { //if the manager approved the inquiry , he needs to make neccessry changes.
 						string subject = data["inquiries subject"][i].to_string();
 						Manage_Requests(subject, data); //for making the neccessry changes
+						cout << CYAN;
 						cout << "Your employee inquiry has been approved.You made the neccessary changes." << endl;
+						cout << WHITE;
 					}
 					else {
+						cout << CYAN;
 						cout << "Your employee inquiry has been disclined." << endl;
+						cout << WHITE;
 					}
-					cout << "Thank you,Manager." << endl;
+					cout << "Thank you,Manager." << endl<<endl;
 					write_to_file(alldata, path); //updates inquiries in file
 					break;
 				}
@@ -1750,7 +1830,7 @@ void Manage_Inquiries_Status() {
 		}
 	}
 	if (!flag)
-		cout << "employee not found in this id." << endl;
+		cout << "employee not found in this id." << endl<<endl;
 }
 
 void Manager_Edit_Employee(string employee_id)
@@ -1781,16 +1861,21 @@ void Manager_Edit_Employee(string employee_id)
 				cout << "4.Hourly Wage" << endl;
 				cout << "5.profession" << endl;
 				cout << "6.Exit" << endl;
+				cout << "--------------" << endl << endl;
 				cin >> choice;
 
 				while (1)
 				{
 					if (!(choice >= 1 && choice <= 6))
-						cout << "Bad input : Enter again , your choise must be between 1 and 6" << endl;
+					{
+						cout << RED;
+						cout << "Bad input : Enter again , your choise must be between 1 and 6" << endl << endl;
+					}
 					else
 						break;
 					cin >> choice;
 				}
+				cout << WHITE;
 
 				switch (choice)
 				{
@@ -1809,7 +1894,9 @@ void Manager_Edit_Employee(string employee_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -1827,7 +1914,9 @@ void Manager_Edit_Employee(string employee_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -1862,7 +1951,9 @@ void Manager_Edit_Employee(string employee_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -1888,7 +1979,9 @@ void Manager_Edit_Employee(string employee_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -1906,17 +1999,21 @@ void Manager_Edit_Employee(string employee_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
 
 				case 6:
-					cout << "back to menu";
+					cout << "back to menu"<<endl;
 					break;
 
 				default:
+					cout << RED;
 					cout << "Invalid value. Please try again. Enter your choice: 1-6." << endl;
+					cout << WHITE;
 					cin >> choice;
 				}
 
@@ -1945,6 +2042,7 @@ void Manager_Statistics()
 		return;
 	}
 	json alldata = json::parse(is);
+
 	for (std::size_t i = 0; i < alldata.size(); ++i)
 	{
 
@@ -1973,28 +2071,38 @@ void Manager_Statistics()
 		cout << "2.Total working Hours" << endl;
 		cout << "3.Average Hourly Wage" << endl;
 		cout << "4.Exit" << endl;
+		cout << "--------------" << endl << endl;
 		cin >> choice;
 		if (choice == 1)
 		{
-			cout <<endl<< "Total Manager: " << counter_manager << endl;
-			cout << "Total Regular Employee: " << counter_employee << endl;
-			cout << "Total Employee(manager and regular employee): " << counter_total_employee << endl<<endl;
+			cout << CYAN;
+			cout <<endl<< "Total Manager:   " << counter_manager << endl;
+			cout << "Total Regular Employee:   " << counter_employee << endl;
+			cout << "Total Employee(manager and regular employee):   " << counter_total_employee << endl<<"***"<<endl<<endl;
+			cout<< WHITE;
 		}
 		else if (choice == 2)
 		{
-			cout << endl << "Total working hours is: " << total_working_hour << "hours" << endl<<endl;
+			cout << CYAN;
+			cout << endl << "Total working hours is:   " << total_working_hour << "hours" << endl << "***" << endl << endl;
+			cout << WHITE;
 		}
 		else if (choice == 3)
 		{
-			cout << endl << "Average Hourly Wage: " << (average_hourly_wage / counter_employee) << " $" << endl<<endl;
+			cout << CYAN;
+			cout << endl << "Average Hourly Wage:   " << (average_hourly_wage / counter_employee) << " NIS" << endl << "***" << endl << endl;
+			cout << WHITE;
 		}
 		else if (choice == 4)
 		{
+			cout << endl;
 			break;
 		}
 		else
 		{
+			cout << RED;
 			cout << "Invalid value. Please try again. Enter your choice: 1-4." << endl;
+			cout << WHITE;
 			cin >> choice;
 			break;
 		}
@@ -2004,6 +2112,7 @@ void Manager_Statistics()
 //employer functions*************************************************************************************************
 void Employer_Guide()
 {
+	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "First of all, the main menu: " << endl
 		<< "1.Search & book employees  ->  Gives you the ability look for an employee by the proffesion you want in a date you choose and set the price you would like to pay for him, by click Search you will see all the results in a page called Results" << endl
@@ -2014,6 +2123,7 @@ void Employer_Guide()
 		<< "Now I belive you are ready to use the system" << endl
 		<< "Have a great day HR4U" << endl;
 	cout << "-----------------------------------" << endl << endl;
+	cout << WHITE;
 }
 
 void Employer_Edit_Account(string user_id)
@@ -2060,7 +2170,9 @@ void Employer_Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -2081,7 +2193,9 @@ void Employer_Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -2103,7 +2217,9 @@ void Employer_Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -2129,7 +2245,9 @@ void Employer_Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
@@ -2150,14 +2268,16 @@ void Employer_Edit_Account(string user_id)
 					else
 					{
 						write_to_file(alldata, path); //updates the file(actually,re-writes it)! 
-						cout << "Data updated successfully ! " << endl;
+						cout << GREEN;
+						cout << "Data updated successfully ! " << endl << endl;
+						cout << WHITE;
 					}
 				}
 				break;
 				case 6:
 				{
 					string new_user_name = data["first name"].as_string() + GenRandomChars(2);
-					cout << "Your new user name: " << new_user_name << endl;
+					cout << "Your new user name: " << new_user_name << endl<<endl;
 					std::error_code ec;
 					jsonpointer::replace(data, "/user name", json(new_user_name), ec);
 					if (ec)
@@ -2174,7 +2294,7 @@ void Employer_Edit_Account(string user_id)
 				case 7:
 				{
 					string new_password = GenRandomChars(8);
-					cout << "Yuor new password: " << new_password << endl;
+					cout << "Yuor new password: " << new_password << endl<<endl;
 					std::error_code ec;
 					jsonpointer::replace(data, "/password", json(new_password), ec);
 					if (ec)
@@ -2193,7 +2313,9 @@ void Employer_Edit_Account(string user_id)
 				}
 				break;
 				default:
+					cout << RED;
 					cout << "Invalid value. Please try again. Enter your choice: 1-5." << endl;
+					cout << WHITE;
 					cin >> choice;
 				}
 			} while (choice != 8);
@@ -2208,6 +2330,7 @@ void Employer_Menu(string employer_id)
 	int choice;
 	do
 	{
+		cout << endl<<"----------" << endl;
 		cout << "Please enter your choice:" << endl;
 		cout << "1. Search & book employees" << endl;
 		cout << "2. Rate employee" << endl;
@@ -2215,6 +2338,7 @@ void Employer_Menu(string employer_id)
 		cout << "4. Edit account" << endl;
 		cout << " 5.User guide" << endl;
 		cout << "6. Exit system(back to login screen)" << endl;
+		cout << "----------" << endl << endl;
 		cin >> choice;
 		switch (choice)
 		{
@@ -2303,7 +2427,7 @@ void Employer_Search(string employer_id)
 		cin >> hourly_wage;
 		cout << endl << "Results:" << endl << endl;
 		cout << "date: " << date << "      " << "proffesion: " << proffesion << endl << endl;
-		cout << "-------------------------------------------------------------------" << endl;
+		cout << "-------------------------------------------------------------------" << endl<<endl;
 		for (std::size_t i = 0; i < alldata.size(); ++i)
 		{
 			json& data = alldata[i];
@@ -2311,10 +2435,16 @@ void Employer_Search(string employer_id)
 			{
 				string id_employee = data["id"].as_string();
 				float rating = Employee_Rate(id_employee);
+				string print_rating;
+				if (rating == 0)
+					print_rating = "NO RATING";
+				else
+					print_rating =rating;
+				
 				if (Employer_Check_Availability(data["id"].as_string(), date, proffesion, hourly_wage))
 				{
 					counter++;
-					cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() <<"   Rate: "<<rating<< "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
+					cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() <<"   Rate: "<<print_rating<< "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
 
 				}
 
@@ -2322,11 +2452,15 @@ void Employer_Search(string employer_id)
 		}
 		if (counter != 0)
 		{
-			cout << "About" << counter << " results" << endl << endl;
+			cout << YELLOW;
+			cout << "About " << counter << " results" << endl << endl;
+			cout << CYAN;
 			cout << "Enter the ID number of the employee you would like to hire:" << endl;
 			cout << "OR Enter:" << endl;
 			cout << "1. Search again" << endl;
 			cout << "2. Back to menu" << endl;
+			cout << WHITE;
+			cout << "--------" << endl << endl;
 			cin >> choice2;
 			if (choice2 != "1")
 			{
@@ -2349,7 +2483,7 @@ void Employer_Search(string employer_id)
 									data["unavailability"].push_back(date);//update employee
 									write_to_file(alldata, path);
 									//update employer
-									for (std::size_t i = 0; i < alldata.size(); ++i)
+									for (std::size_t j = 0; j < alldata.size(); ++j)
 									{
 										if (data["id"] == employer_id)
 										{
@@ -2367,19 +2501,25 @@ void Employer_Search(string employer_id)
 						}
 						if (flag)
 						{
+							cout << GREEN;
 							cout << "Employee hiring completed successfully! Do not forget to rate according to your satisfaction at the end!" << endl << endl;
+							cout << WHITE;
 							cout << "Please select from the following options: " << endl;
 							cout << "1. Search again" << endl;
 							cout << "2. Back to manu" << endl;
+							cout << "-----" << endl;
 							cin >> choice;
 							if (choice != 1 && choice != 2)
 							{
 								do
 								{
+									cout << RED;
 									cout << "Error! Invalid input. Try again" << endl << endl;
+									cout << WHITE;
 									cout << "Please select from the following options: " << endl;
 									cout << "1. Search again" << endl;
 									cout << "2. Back" << endl;
+									cout << "-----" << endl;
 									cin >> choice;
 								} while (choice != 1 && choice != 2);
 							}
@@ -2389,12 +2529,14 @@ void Employer_Search(string employer_id)
 						else
 						{
 
-
+							cout << RED;
 							cout << "Error!No employee with this ID number" << endl << endl;
+							cout << WHITE;
 							cout << "Enter the ID number of the employee you would like to hire:" << endl;
 							cout << "OR Enter:" << endl;
 							cout << "1. Search again" << endl;
 							cout << "2. Back to menu" << endl;
+							cout << "-----" << endl;
 							cin >> choice2;
 
 
@@ -2422,6 +2564,7 @@ void Employer_Search(string employer_id)
 			cout << "Please select from the following options: " << endl;
 			cout << "1. Search again" << endl;
 			cout << "2. Back to manu" << endl;
+			cout << "-----" << endl;
 			cin >> choice;
 			if (choice != 1 && choice != 2)
 			{
@@ -2431,6 +2574,7 @@ void Employer_Search(string employer_id)
 					cout << "Please select from the following options: " << endl;
 					cout << "1. Search again" << endl;
 					cout << "2. Back" << endl;
+					cout << "-----" << endl;
 					cin >> choice;
 				} while (choice != 1 && choice != 2);
 			}
@@ -2472,15 +2616,20 @@ void Employer_rate_employee(string employer_id)
 				length = data["hierd id"].size();
 				if (length == 0)
 				{
+					cout << RED;
 					cout << "You have not yet hired any employees" << endl;
+					cout << WHITE;
 					cout << "You are returned to the menu" << endl << endl;
 					return;
 				}
 				else
 				{
+					cout << BLUE;
+					cout << "Row number      DATE               ID            SATISFACTION             PROFESSION" << endl << endl;
+					cout << WHITE;
 					for (;j < length;j++)
 					{
-						cout << "Row number      DATE               ID            SATISFACTION             PROFESSION" << endl << endl;
+
 
 
 						rating = data["hiring rate"][j].as_double();
@@ -2524,7 +2673,9 @@ void Employer_rate_employee(string employer_id)
 						{
 							do
 							{
+								cout << RED;
 								cout << "Error! not a number between 1 to 5";
+								cout << WHITE;
 								cout << "What is your level of satisfaction with the service? " << endl;
 								cout << "The rating is between 1 and 5 stars" << endl << "1 (Not satisfied at all)  to 5 (Very satisfied) " << endl;
 								cin >> rate;
@@ -2540,20 +2691,26 @@ void Employer_rate_employee(string employer_id)
 						}
 						else
 						{
+							cout << GREEN;
 							cout << "The rating was successfully received! Thank you, your opinion is important to us" << endl << endl;
+							cout << WHITE;
 							write_to_file(alldata, path);
 							cout << "Choose from the following options:" << endl;
 							cout << "1.Rank another employee" << endl;
 							cout << "2.back to menu" << endl;
+							cout << "----" << endl;
 							cin >> select;
 							if (select != 1 && select != 2)
 							{
 								do
 								{
-									cout << "Error!Invalid input" << endl;
+									cout << RED;
+									cout << "Error! Invalid input" << endl;
+									cout << WHITE;
 									cout << "Choose from the following options:" << endl;
 									cout << "1.Rank another employee" << endl;
 									cout << "2.back to menu" << endl;
+									cout << "-----";
 									cin >> select;
 								} while (select != 1 && select != 2);
 							}
@@ -2562,16 +2719,21 @@ void Employer_rate_employee(string employer_id)
 					}
 					else//already ranked this employee
 					{
+						cout << YELLOW;
 						cout << "You have already rated the employee you selected on that specific work day." << endl << endl;
+						cout << WHITE;
 						cout << "Choose from the following options:" << endl;
 						cout << "1.Rank different employee" << endl;
 						cout << "2.back to menu" << endl;
+						cout << "-----";
 						cin >> select;
 						if (select != 1 && select != 2)
 						{
 							do
 							{
-								cout << "Error!Invalid input" << endl;
+								cout << RED;
+								cout << "Error! Invalid input" << endl;
+								cout << WHITE;
 								cout << "Choose from the following options:" << endl;
 								cout << "1.Rank another employee" << endl;
 								cout << "2.back to menu" << endl;
@@ -2609,13 +2771,17 @@ void Employer_Employment_History(string employer_id)
 			int length = (int)(data["hierd id"].size());
 			if (length == 0)
 			{
+				cout << RED;
 				cout << "You have not yet hired any employees." << endl;
+				cout << WHITE;
 				cout << "You are returned to menu" << endl << endl << endl;
 				return;
 			}
 			else
 			{
+				cout << BLUE;
 				cout << "DATE                 ID             SATISFACTION                 PROFESSION" << endl << endl;
+				cout << WHITE;
 
 				for (int y = 0; y < length; ++y)
 				{
