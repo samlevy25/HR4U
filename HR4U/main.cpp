@@ -2820,7 +2820,6 @@ void Employer_Employment_History(string employer_id)
 //main
 int main()
 {
-	Remove_Employee();
 	Logo();
 	Login();
 	return 0;
