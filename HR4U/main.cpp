@@ -2482,18 +2482,6 @@ void Employer_Search(string employer_id)
 								{
 									data["unavailability"].push_back(date);//update employee
 									write_to_file(alldata, path);
-									//update employer
-									for (std::size_t j = 0; j < alldata.size(); ++j)
-									{
-										if (data["id"] == employer_id)
-										{
-											data["hierd id"].push_back(choice2);
-											data["hierd proffesion"].push_back(proffesion);
-											data["hiring date"].push_back(date);
-											data["hiring rate"].push_back(0);//temp rate until he will rate after the employee will finish the job
-											write_to_file(alldata, path);
-										}
-									}
 									flag = true;
 									break;
 								}
@@ -2501,6 +2489,18 @@ void Employer_Search(string employer_id)
 						}
 						if (flag)
 						{
+							for (std::size_t i = 0; i < alldata.size(); ++i)
+							{
+								json& data = alldata[i];
+								if (data["id"] == employer_id)
+								{
+									data["hierd id"].push_back(choice2);
+									data["hierd proffesion"].push_back(proffesion);
+									data["hiring date"].push_back(date);
+									data["hiring rate"].push_back(0);//temp rate until he will rate after the employee will finish the job
+									write_to_file(alldata, path);
+								}
+							}
 							cout << GREEN;
 							cout << "Employee hiring completed successfully! Do not forget to rate according to your satisfaction at the end!" << endl << endl;
 							cout << WHITE;
@@ -2674,7 +2674,7 @@ void Employer_rate_employee(string employer_id)
 							do
 							{
 								cout << RED;
-								cout << "Error! not a number between 1 to 5";
+								cout << "Error! not a number between 1 to 5" << endl;
 								cout << WHITE;
 								cout << "What is your level of satisfaction with the service? " << endl;
 								cout << "The rating is between 1 and 5 stars" << endl << "1 (Not satisfied at all)  to 5 (Very satisfied) " << endl;
