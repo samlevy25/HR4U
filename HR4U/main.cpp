@@ -35,6 +35,7 @@ using std::cin;
 
 //declarations:
 char GenRand();
+bool check_id(string id);
 string GenRandomChars(int n);
 void Logo();
 void changeColor(int desiredColor);
@@ -202,7 +203,7 @@ bool check_phone(string phone) {
 		int counter = 0;
 		for (int i = 0; i < phone.length(); ++i)
 		{
-			if (int(phone[i]) >= 0 && int(phone[i]) <= 9) //checks wether the phone number contains only digits 0-9
+			if (int(phone[i]) >= 48 && int(phone[i]) <= 57) //checks wether the phone number contains only digits 0-9
 				counter++;
 		}
 		if (counter == 10)
@@ -210,6 +211,23 @@ bool check_phone(string phone) {
 	}
 	else {
 		cout << "phone number invalid.please enter 10 digits phone number" << endl;
+	}
+	return false;
+}
+bool check_id(string id) {
+	if (id.length() == 10)
+	{
+		int counter = 0;
+		for (int i = 0; i < id.length(); ++i)
+		{
+			if (int(id[i]) >= 48 && int(id[i]) <= 57) //checks wether the phone number contains only digits 0-9
+				counter++;
+		}
+		if (counter == 10)
+			return true;
+	}
+	else {
+		cout << "ID number invalid.please enter 9 digits phone number" << endl;
 	}
 	return false;
 }
@@ -225,13 +243,15 @@ bool check_email(string email) {
 	if (counter1 == 1 && counter2 >= 1)
 		return true;
 	else {
-		cout << "phone number invalid.please enter 10 digits phone number" << endl;
+		cout << "email invalid.please entervalid email." << endl;
 		return false;
 	}
 }
 //general funcions***************************************************************************************************
 void Login()
 {
+	string title = "Login";
+	print_title(title);//only for printing colourful title
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -253,7 +273,7 @@ void Login()
 		cout << "Please enter your choice:" << endl;
 		cout << "1.Login with username and password" << endl;
 		cout << "2.Forgot user name/password?" << endl;
-		cout << "3.New here? register  as employer" << endl;
+		cout << "3.New here? register as employer" << endl;
 		cout << "4.exit" << endl;
 		cout << "----------" <<endl<<endl;
 		cin >> choice;
@@ -283,11 +303,13 @@ void Login()
 								string user_id = data["id"].as_string();
 								if (data["type"] == "employee")
 								{
+									
 									cout << endl << "#########################################################" << endl << endl;
 									cout << endl << "welcome  " << data["first name"] << endl << endl;
 
 									Employee_Menu(user_id);
 									flag = true;
+									choice1 = 2;
 								}
 								if (data["type"] == "manager")
 								{
@@ -295,6 +317,7 @@ void Login()
 									cout << endl << "welcome  " << data["first name"] << endl << endl;
 									Manager_Menu(user_id);
 									flag = true;
+									choice1 = 2;
 								}
 								if (data["type"] == "employer")
 								{
@@ -302,6 +325,7 @@ void Login()
 									cout << endl << "welcome  " << data["first name"] << endl << endl;
 									Employer_Menu(user_id);
 									flag = true;
+									choice1 = 2;
 								}
 								flag = true;
 								break;
@@ -424,6 +448,7 @@ void Login()
 
 void Edit_Account(string user_id)
 {
+	system("CLS");
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -591,6 +616,7 @@ bool Available_Date(string employee_id, string date)
 
 void Add_New_Employee() //function for add a new employee to the database company
 {
+	system("CLS");
 	//personal info manager must provide for adding a new employee
 	string address;
 	string email;
@@ -618,18 +644,59 @@ void Add_New_Employee() //function for add a new employee to the database compan
 	cin >> lastName;
 	cout << "ID - ";
 	cin >> id;
+	if (!check_id(id))
+	{
+		do
+		{
+			cout << "ID - ";
+			cin >> id;
+		} while (!check_id(id));
+	}
 	cout << "Email - ";
 	cin >> email;
+	if (!check_email(email))
+	{
+		do
+		{
+			cout << "Email - ";
+			cin >> email;
+		} while (!check_email(email));
+	}
 	cout << "Address - ";
 	cin >> address;
 	cout << "Phone - ";
 	cin >> phone;
+	if (!check_phone(phone))
+	{
+		do
+		{
+			cout << "Phone - ";
+			cin >> phone;
+		} while (!check_phone(phone));
+	}
 	cout << "Hourly Wage - (enter integer number)";
 	cin >> hourlyWage;
+	if (hourlyWage<=0)
+	{
+		do
+		{
+			cout << "hourly wage must be positive number.try again" << endl;
+			cout << "Hourly Wage - (enter integer number)";
+			cin >> hourlyWage;
+		} while (hourlyWage <= 0);
+	}
 	cout << "Emergency contact:" << endl;
 	cout << "Name - ";
 	cin >> emergencyContactName;
 	cout << "Phone - ";
+	if (!check_phone(phone))
+	{
+		do
+		{
+			cout << "Phone - ";
+			cin >> phone;
+		} while (!check_phone(phone));
+	}
 	cin >> emergencyContactPhone;
 	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
 	cout << "1.What is your mother`s name?" << endl;
@@ -763,6 +830,7 @@ void Add_New_Employee() //function for add a new employee to the database compan
 
 void Add_New_Employer() //function for add a new employer to the database company
 {
+	system("CLS");
 	//personal info user must provide for creating a new employer 
 	string address;
 	string email;
@@ -784,12 +852,36 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	cin >> lastName;
 	cout << "ID - ";
 	cin >> id;
+	if (!check_id(id))
+	{
+		do
+		{
+			cout << "ID - ";
+			cin >> id;
+		} while (!check_id(id));
+	}
 	cout << "Email - ";
 	cin >> email;
+	if (!check_email(email))
+	{
+		do
+		{
+			cout << "Email - ";
+			cin >> email;
+		} while (!check_email(email));
+	}
 	cout << "Address - ";
 	cin >> address;
 	cout << "Phone - ";
 	cin >> phone;
+	if (!check_phone(phone))
+	{
+		do
+		{
+			cout << "Phone - ";
+			cin >> phone;
+		} while (!check_phone(phone));
+	}
 	cout << "Reset password details: (Please enter the answers to your security questions)" << endl;
 	cout << "1.What is your mother`s name?" << endl;
 	cin >> resetPasswordDetails[0];
@@ -799,6 +891,14 @@ void Add_New_Employer() //function for add a new employer to the database compan
 	cin >> resetPasswordDetails[2];
 	cout << "Enter your credit card number for charge" << endl;
 	cin >> creditcard;
+	if (!check_card(creditcard))
+	{
+		do
+		{
+			cout << "Enter your credit card number for charge" << endl;
+			cin >> creditcard;
+		} while (!check_card(creditcard));
+	}
 	cout << "Thank you for providing personal details.Just a moment..." << endl<<endl;
 	//end of asking for personal info 
 
@@ -883,6 +983,7 @@ void Add_New_Employer() //function for add a new employer to the database compan
 }
 
 void Remove_Employee() { // delete employee function , from the database company
+	system("CLS");
 	string employee_id;
 	cout << "Please enter the employee id you would like to remove:" << endl;
 	cin >> employee_id;
@@ -957,6 +1058,7 @@ void Employee_Menu(string employee_id) {
 			break;
 		case 7:
 			cout << "bye bye" << endl;
+			system("CLS");
 			break;
 		default:
 			break;
@@ -966,6 +1068,7 @@ void Employee_Menu(string employee_id) {
 
 void Employee_Guide()
 {
+	system("CLS");
 	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "First of all, the main menu: " << endl
@@ -1009,6 +1112,7 @@ void Employee_Inquiries_Menu(string employee_id) {
 
 
 void Employee_All_Inquiries(string employee_id) {//the inquires detail has been changed. we need to deside what is the best way.g
+	system("CLS");
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -1050,6 +1154,7 @@ void Employee_All_Inquiries(string employee_id) {//the inquires detail has been 
 
 void Employee_Add_Inquiries(string employee_id)
 {
+	system("CLS");
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -1142,6 +1247,7 @@ void Employee_Add_Inquiries(string employee_id)
 
 void Employee_Employment_History(string employee_id)
 {
+	system("CLS");
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -1212,6 +1318,7 @@ float Employee_Rate(string employee_id)
 
 void Employee_Shift(string employee_id)
 {
+	system("CLS");
 	int choice;
 	int start_hour, end_hour, start_minute, end_minute;
 	std::string path = "./database.json";
@@ -1351,6 +1458,7 @@ void Employee_Shift(string employee_id)
 
 void Employee_Salary_History(string employee_id)
 {
+	system("CLS");
 	bool flag_help = false;
 	std::string path = "./database.json";
 	std::fstream is(path);
@@ -1663,6 +1771,7 @@ void Manager_Menu(string manager_id)
 			Manager_Guide();
 			break;
 		case 7:
+			system("CLS");
 			cout << "Back to login screen" << endl;
 			break;
 		default:
@@ -1676,6 +1785,7 @@ void Manager_Menu(string manager_id)
 
 void Manager_Guide()
 {
+	system("CLS");
 	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "The main menu: " << endl
@@ -1692,6 +1802,7 @@ void Manager_Guide()
 
 void Manager_Get_Employees_Details()
 {
+	system("CLS");
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
@@ -2041,6 +2152,7 @@ void Manager_Edit_Employee(string employee_id)
 
 void Manager_Statistics()
 {
+	system("CLS");
 	int choice;
 	float average_hourly_wage = 0;
 	int counter_total_employee = 0;
@@ -2125,6 +2237,7 @@ void Manager_Statistics()
 //employer functions*************************************************************************************************
 void Employer_Guide()
 {
+	system("CLS");
 	cout << PINK;
 	cout << "Hello, I will teach you now how to use the system." << endl << endl
 		<< "First of all, the main menu: " << endl
@@ -2141,6 +2254,7 @@ void Employer_Guide()
 
 void Employer_Edit_Account(string user_id)
 {
+	system("CLS");
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -2371,6 +2485,7 @@ void Employer_Menu(string employer_id)
 			Employer_Guide();
 			break;
 		case 6:
+			system("CLS");
 			cout << "Back to login screen" << endl;
 			break;
 		default:
@@ -2416,6 +2531,7 @@ bool Employer_Check_Availability(string employee_id, string date, string profess
 
 void Employer_Search(string employer_id)
 {
+	system("CLS");
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -2449,16 +2565,17 @@ void Employer_Search(string employer_id)
 				string id_employee = data["id"].as_string();
 				float rating = Employee_Rate(id_employee);
 				string print_rating;
-				if (rating == 0)
+				
 					print_rating = "NO RATING";
-				else
-					print_rating =rating;
+
 				
 				if (Employer_Check_Availability(data["id"].as_string(), date, proffesion, hourly_wage))
 				{
 					counter++;
-					cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() <<"   Rate: "<<print_rating<< "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
-
+					if (rating == 0)
+						cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() <<"   Rate: "<<print_rating<< "     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
+					else
+						cout << "ID:" << data["id"].as_string() << "     Name:" << data["first name"].as_string() << " " << data["last name"].as_string() << "   Rate: " << setprecision(2) <<rating <<"     Hourly wage:" << data["hourly wage"].as_string() << endl << endl;
 				}
 
 			}
@@ -2600,6 +2717,7 @@ void Employer_Search(string employer_id)
 
 void Employer_rate_employee(string employer_id)
 {
+	system("CLS");
 	string path = "./database.json";
 	fstream is(path);
 	if (!is)
@@ -2764,6 +2882,7 @@ void Employer_rate_employee(string employer_id)
 
 void Employer_Employment_History(string employer_id)
 {
+	system("CLS");
 	std::string path = "./database.json";
 	std::fstream is(path);
 	if (!is)
